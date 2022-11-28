@@ -1,8 +1,8 @@
 import axios from 'axios'
-import {GET_USER_URL} from './URL'
+import {URL} from './URL'
 
 export default axios.create({
-    baseURL:GET_USER_URL,
+    baseURL:URL,
     method:'GET',
     timeout:2000,
     withCredentials:true,

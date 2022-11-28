@@ -51,7 +51,7 @@ export default function Login({navigation}){
         setNumber(reponse.data.alertPhoneNumbers)
         dispatch(setCredentials({userToken,username,password,number}))
         setUsername("Enter your Username")
-        setPassword("Enter your Password")
+        setPassword("")
         /*await SecureStore.setItemAsync('STORAGE_USER',JSON.stringify({username,password}))
         await SecureStore.setItemAsync('STORAGE_TOKEN',JSON.stringify(userToken))*/
       }).catch((err)=>{

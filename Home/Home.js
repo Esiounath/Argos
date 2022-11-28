@@ -15,7 +15,7 @@ export default function Sidebar({navigation}){
   const [ErrMsg,setErrMsg] = useState(false)
   //console.log(userToken)
   async function Events(){
-    await axios('?token',{
+    await axios('/events',{
       method:'GET',
       headers:{
         'content-type': 'application/json',
