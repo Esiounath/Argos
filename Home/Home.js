@@ -24,7 +24,6 @@ export default function Sidebar({navigation}){
         userToken,
       },
     }).then((reponse)=>{
-      console.log("Reponse bonne")
       console.log(JSON.stringify(reponse))
     }).catch((error)=>{
       console.log("Erreur",error)
