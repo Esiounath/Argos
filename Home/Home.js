@@ -13,7 +13,13 @@ export default function Sidebar({navigation}){
   const dispatch = useDispatch()
   const userToken = userData.token ;
   const [ErrMsg,setErrMsg] = useState(false)
+  const [Alerts,setAlerts] = useState("")
   //console.log(userToken)
+  function Test(){
+    return( <View>
+      <Text>Merci eden</Text>
+    </View>);
+  }
   async function Events(){
     await axios('/events',{
       method:'GET',
@@ -24,7 +30,9 @@ export default function Sidebar({navigation}){
         userToken,
       },
     }).then((reponse)=>{
-      console.log(JSON.stringify(reponse))
+      setAlerts(JSON.stringify(reponse.data.events[4]))
+      console.log(typeof Alerts.event_type.map.name)
+      
     }).catch((error)=>{
       console.log("Erreur",error)
     });

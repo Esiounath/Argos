@@ -16,7 +16,7 @@ async function getValueFor(key) {
 }
 export default function Login({navigation}){
     const [username,setUsername] = useState("Username");
-    const [password,setPassword] = useState("Mot de passe");
+    const [password,setPassword] = useState("");
    /* const CookiesUser = getValueFor('STORAGE_USER')
     const CookiesPassword = getValueFor('STORAGE_PASSWORD')*/
     const [errMsg,setErrMsg] = useState('')
@@ -52,6 +52,7 @@ export default function Login({navigation}){
         dispatch(setCredentials({userToken,username,password,number}))
         setUsername("Enter your Username")
         setPassword("")
+        console.log(reponse.data.token)
         /*await SecureStore.setItemAsync('STORAGE_USER',JSON.stringify({username,password}))
         await SecureStore.setItemAsync('STORAGE_TOKEN',JSON.stringify(userToken))*/
       }).catch((err)=>{
