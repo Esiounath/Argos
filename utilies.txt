@@ -1,7 +1,0 @@
-https://reactnavigation.org/docs/themes/
-
-private final String USER_LOGIN_URL = "https://secure.argos-network.com/api/auth/login";
-
-private final String GET_USER_URL   = "https://secure.argos-network.com/api/user";
-
-https://developer.android.com/reference/android/Manifest.permission
