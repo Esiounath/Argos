@@ -6,40 +6,155 @@ import {useSelector} from 'react-redux';
 import {useDispatch} from 'react-redux';
 import {logOut} from "../Redux/Slice";
 import axios from '../API/Argos_GET_USERS'
-import { Value } from "react-native-reanimated";
 
 
 export default function Sidebar({navigation}){
   const userData = useSelector((state) => state.auth)
   const dispatch = useDispatch()
+
   const userToken = userData.token ;
   const [ErrMsg,setErrMsg] = useState(false)
   const [Data,setData] = useState({})
-  //console.log(userToken)
+  useEffect(()=>{
+  const timeout = setTimeout(()=>{
+      async function Events(){
+    await axios('/events',{
+      method:'GET',
+      headers:{
+        timeout:300,
+        'content-type': 'application/json',
+      },
+      data:{
+        userToken,
+      },
+    }).then((reponse)=>{
+        setData(reponse);//data.events[4]
+        clearTimeout(timeout)
+    }).catch((error)=>{
+      console.log("Erreur",error)
+    });
+  }
+  Events();
+ // console.log(Data.data.events[1].event_type.name)
+  },200)
+  return () => clearTimeout(timeout);
+  },[])
+  function info(value){
+    try{
+      const obj = [Data.data.events[value].event_type]
+      const picture = Object.keys(obj[0]).
+      filter((key) => key.includes('picto')).
+      reduce((cur, key) => { return Object.assign(cur, { [key]: obj[0][key]})}, {});
+      const event = Object.keys(obj[0]).
+      filter((key) => key.includes('name')).
+      reduce((cur, key) => { return Object.assign(cur, { [key]: obj[0][key]})}, {});
+      return Object.assign(event,picture)
+    }catch(error){
+      console.log(error)
+    }
+  
+  }
   function HomeAlert(){
     try{
-      Events()
       if(Data !== null || Data !== undefined){
-        return(<View style={styles.HomeAlert}>
-          <Image />
-          <Text style={styles.HomeText}></Text>
-          <Pressable>
-            <Image />
-          </Pressable>
-        </View>);
-      }
+        if(Object.keys(info(1)).length >= 2 && Object.keys(info(0)).length >= 2){
+          return (
+            <View style={styles.Home}>
+          <View style={styles.HomeAlert}>
+            <Pressable>
+                 <Image  style={styles.AlertPicture} source={{
+                   uri:info(0).picto
+                 }}/>
+                 </Pressable>
+                 <Text style={styles.HomeText}>
+                   {info(0).name}
+                 </Text>
+                 <Pressable>
+                 <Svg x="0px" y="0px"
+width="40" height="40"
+viewBox="0 0 50 50">
+                    <Path d="M38.65 15.3V11h-4.3V8h4.3V3.65h3V8H46v3h-4.35v4.3ZM4.7 44q-1.2 0-2.1-.9-.9-.9-.9-2.1V15.35q0-1.15.9-2.075.9-.925 2.1-.925h7.35L15.7 8h14v3H17.1l-3.65 4.35H4.7V41h34V20h3v21q0 1.2-.925 2.1-.925.9-2.075.9Zm17-7.3q3.6 0 6.05-2.45 2.45-2.45 2.45-6.1 0-3.6-2.45-6.025Q25.3 19.7 21.7 19.7q-3.65 0-6.075 2.425Q13.2 24.55 13.2 28.15q0 3.65 2.425 6.1Q18.05 36.7 21.7 36.7Zm0-3q-2.4 0-3.95-1.575-1.55-1.575-1.55-3.975 0-2.35 1.55-3.9 1.55-1.55 3.95-1.55 2.35 0 3.925 1.55 1.575 1.55 1.575 3.9 0 2.4-1.575 3.975Q24.05 33.7 21.7 33.7Zm0-5.5Z" stroke="#f1f1f1" strokeWidth="0.5" width="30" height="30" fill="#f1f1f1" />
+                   </Svg>
+                 </Pressable>
+                 </View>
+
+
+                 <View style={styles.HomeAlert}>
+                 <Pressable>
+                 <Image  style={styles.AlertPicture} source={{
+                   uri:info(1).picto
+                 }}/>
+                 </Pressable>
+                 <Text style={styles.HomeText}>
+                   {info(1).name}
+                 </Text>
+                 <Pressable>
+                 <Svg x="0px" y="0px"
+width="40" height="40"
+viewBox="0 0 50 50">
+                    <Path d="M38.65 15.3V11h-4.3V8h4.3V3.65h3V8H46v3h-4.35v4.3ZM4.7 44q-1.2 0-2.1-.9-.9-.9-.9-2.1V15.35q0-1.15.9-2.075.9-.925 2.1-.925h7.35L15.7 8h14v3H17.1l-3.65 4.35H4.7V41h34V20h3v21q0 1.2-.925 2.1-.925.9-2.075.9Zm17-7.3q3.6 0 6.05-2.45 2.45-2.45 2.45-6.1 0-3.6-2.45-6.025Q25.3 19.7 21.7 19.7q-3.65 0-6.075 2.425Q13.2 24.55 13.2 28.15q0 3.65 2.425 6.1Q18.05 36.7 21.7 36.7Zm0-3q-2.4 0-3.95-1.575-1.55-1.575-1.55-3.975 0-2.35 1.55-3.9 1.55-1.55 3.95-1.55 2.35 0 3.925 1.55 1.575 1.55 1.575 3.9 0 2.4-1.575 3.975Q24.05 33.7 21.7 33.7Zm0-5.5Z" stroke="#f1f1f1" strokeWidth="0.5" width="30" height="30" fill="#f1f1f1" />
+                   </Svg>
+                 </Pressable>
+                 </View>
+               </View>
+               );
+        }else if(Object.keys(info(0)).length >= 2){
+          return(
+            <View style={styles.Home}>
+          <View style={styles.HomeAlert}>
+            <Pressable>
+                 <Image  style={styles.AlertPicture} source={{
+                   uri:info(0).picto
+                 }}/>
+                 </Pressable>
+                 <Text style={styles.HomeText}>
+                   {info(0).name}
+                 </Text>
+                 <Pressable>
+                 <Svg x="0px" y="0px"
+width="40" height="40"
+viewBox="0 0 50 50">
+                    <Path d="M38.65 15.3V11h-4.3V8h4.3V3.65h3V8H46v3h-4.35v4.3ZM4.7 44q-1.2 0-2.1-.9-.9-.9-.9-2.1V15.35q0-1.15.9-2.075.9-.925 2.1-.925h7.35L15.7 8h14v3H17.1l-3.65 4.35H4.7V41h34V20h3v21q0 1.2-.925 2.1-.925.9-2.075.9Zm17-7.3q3.6 0 6.05-2.45 2.45-2.45 2.45-6.1 0-3.6-2.45-6.025Q25.3 19.7 21.7 19.7q-3.65 0-6.075 2.425Q13.2 24.55 13.2 28.15q0 3.65 2.425 6.1Q18.05 36.7 21.7 36.7Zm0-3q-2.4 0-3.95-1.575-1.55-1.575-1.55-3.975 0-2.35 1.55-3.9 1.55-1.55 3.95-1.55 2.35 0 3.925 1.55 1.575 1.55 1.575 3.9 0 2.4-1.575 3.975Q24.05 33.7 21.7 33.7Zm0-5.5Z" stroke="#f1f1f1" strokeWidth="0.5" width="30" height="30" fill="#f1f1f1" />
+                   </Svg>
+                 </Pressable>
+                 </View>
+                 </View>
+          );
+        }else{
+          return(
+            <View style={styles.Home}>
+          <View style={styles.HomeAlert}>
+            <Pressable>
+                 <Image  style={styles.AlertPicture} source={{
+                   uri:info(1).picto
+                 }}/>
+                 </Pressable>
+                 <Text style={styles.HomeText}>
+                   {info(1).name}
+                 </Text>
+                 <Pressable>
+                 <Svg x="0px" y="0px"
+width="40" height="40"
+viewBox="0 0 50 50">
+                    <Path d="M38.65 15.3V11h-4.3V8h4.3V3.65h3V8H46v3h-4.35v4.3ZM4.7 44q-1.2 0-2.1-.9-.9-.9-.9-2.1V15.35q0-1.15.9-2.075.9-.925 2.1-.925h7.35L15.7 8h14v3H17.1l-3.65 4.35H4.7V41h34V20h3v21q0 1.2-.925 2.1-.925.9-2.075.9Zm17-7.3q3.6 0 6.05-2.45 2.45-2.45 2.45-6.1 0-3.6-2.45-6.025Q25.3 19.7 21.7 19.7q-3.65 0-6.075 2.425Q13.2 24.55 13.2 28.15q0 3.65 2.425 6.1Q18.05 36.7 21.7 36.7Zm0-3q-2.4 0-3.95-1.575-1.55-1.575-1.55-3.975 0-2.35 1.55-3.9 1.55-1.55 3.95-1.55 2.35 0 3.925 1.55 1.575 1.55 1.575 3.9 0 2.4-1.575 3.975Q24.05 33.7 21.7 33.7Zm0-5.5Z" stroke="#f1f1f1" strokeWidth="0.5" width="30" height="30" fill="#f1f1f1" />
+                   </Svg>
+                 </Pressable>
+                 </View>
+                 </View>
+          );
+        }
+    }
     }catch(error){
       console.log(error)
     }
   }
   function Onglets(){
     try{    
-      Events()
       //console.log(Data)
       if(Data !== null || Data !== undefined){
-       const prop = Object.keys(Data.event_type.map).
+       const prop = Object.keys(Data.data.events[0].event_type.map).
        filter((key) => key.includes('name')).
-       reduce((cur, key) => { return Object.assign(cur, { [key]: Data.event_type.map[key] })}, {});
+       reduce((cur, key) => { return Object.assign(cur, { [key]: Data.data.events[0].event_type.map[key] })}, {});
        for(const size in Object.keys(prop)){
           return( 
             <View style={styles.eventAlert}>
@@ -60,25 +175,13 @@ viewBox="0 0 50 50">
     }
   }
 useEffect(()=>{
-  if(userData.password === null && userData.token === null && userData.username === null && userData.alertNumber === null){
-    navigation.navigate('Login')
-  }
+  const time = setTimeout(()=>{
+    if(userData.password === null && userData.token === null && userData.username === null && userData.alertNumber === null){
+      navigation.navigate('Login')
+    }
+  },200)
+  return () => clearTimeout(time)
 },[userData.username,userData.password,userData.token,userData.alertNumber]);
-async function Events(){
-  await axios('/events',{
-    method:'GET',
-    headers:{
-      'content-type': 'application/json',
-    },
-    data:{
-      userToken,
-    },
-  }).then((reponse)=>{
-    setData(reponse.data.events[4])
-  }).catch((error)=>{
-    console.log("Erreur",error)
-  });
-}
   const drawer = useRef(null);
 const drawerPosition = "left";
   const navigationView = () => (
@@ -120,12 +223,34 @@ viewBox="0 0 30 30" style={styles.menu}>
       </Pressable>
       <Text style={styles.title}>Argos Network</Text>
       </SafeAreaView>
+      {Data !== undefined ? HomeAlert() : null}
     <Tab/>
     </DrawerLayoutAndroid>
   );
 };
 
 const styles = StyleSheet.create({
+  Home:{
+    flexDirection:"column",
+    justifyContent:'flex-start',
+    flex:3,
+  },
+  AlertPicture:{
+    height:70,
+    width:70
+  },
+  HomeAlert:{
+    flex:0,
+    flexDirection:'row',
+    justifyContent:'space-around',
+    alignItems:'center',
+    textAlign:'flex-start',
+  },
+  HomeText:{
+    fontSize:18,
+    fontWeight:'700',
+    color:"#f1f1f1"
+  },
   eventAlert:{
     flex:4,
     flexDirection:'row',

@@ -1,0 +1,85 @@
+  Object {
+      "accuracy": 18,
+      "contact_line_number": null,
+      "created_at": "2022-04-25 11:57:45",
+      "description": null,
+      "event_type": Object {
+        "id": 155,
+        "map": Object {
+          "groups": Array [
+            Object {
+              "id": 56,
+            },
+            Object {
+              "id": 3,
+            },
+            Object {
+              "id": 1,
+            },
+            Object {
+              "id": 57,
+            },
+            Object {
+              "id": 58,
+            },
+          ],
+          "id": 39,
+          "name": "Alertes : La Chapelle-sur-Erdre",
+        },
+        "map_id": 39,
+        "name": "agression physique / vandalisme",
+        "picto": "https://secure.argos-network.com/uploads/event_type_img/3/0-action5.png",
+        "type": 0,
+      },
+      "event_type_id": 155,
+      "id": 1355,
+      "imei": "",
+      "latitude": "48.80087269",
+      "line_number": null,
+      "longitude": "2.62692441",
+      "photo": null,
+      "title": null,
+      "triggered_at": "2022-04-25 11:57:48",
+      "updated_at": "2022-04-25 11:57:45",
+      "user": null,
+      "user_id": 0,
+    },
+    Object {
+      "accuracy": 13,
+      "contact_line_number": null,
+      "created_at": "2022-04-25 11:56:24",
+      "description": null,
+      "event_type": Object {
+        "id": 154,
+        "map": Object {
+          "groups": Array [
+            Object {
+              "id": 56,
+            },
+            Object {
+              "id": 3,
+            },
+            Object {
+              "id": 1,
+            },
+            Object {
+              "id": 57,
+            },
+            Object {
+              "id": 58,
+            },
+          ],
+          "id": 39,
+          "name": "Alertes : La Chapelle-sur-Erdre",
+        },
+        "map_id": 39,
+        "name": "menace / insulte / intimidation",
+        "picto": "https://secure.argos-network.com/uploads/event_type_img/3/0-action3.png",
+        "type": 0,
+      },
+      "event_type_id": 154,
+      "id": 1354,
+      "imei": "",
+      "latitude": "48.80070195",
+      "line_number": null,
+      "longitude": "2...(truncated to the first 10000 characters)
