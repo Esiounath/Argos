@@ -52,14 +52,15 @@ export default function Sidebar({navigation}){
         setLocation(await Location.getCurrentPositionAsync({}));      }
     })();
   }, [location]);
-  async function SendAlert(value){
+  async function SendAlert(value,id){
     try{
       if(location){   
         const triggered_at = `${date.getFullYear().toString()}-${date.getMonth() + 1}-${date.getDate().toString()} ${date.getHours().toString()}:${date.getMinutes().toString()}:${date.getSeconds().toString().padStart(2, '0')}`;//"2022-04-25 11:33:27"
-        const eventTypeId = value ;//Data.data.events[1].event_type_id
+        const event_type_id = value ;//Data.data.events[1].event_type_id
         const latitude = JSON.stringify(location?.coords.latitude)
         const longitude = JSON.stringify(location?.coords.longitude)
         const IMEI = "" ;
+        const user_id = id ;
         const accuracy = JSON.stringify(location?.coords.accuracy) ;
         await axios('/event',{
           method:'post',
@@ -67,7 +68,8 @@ export default function Sidebar({navigation}){
           withCredentials: false,
           data:{
             triggered_at,
-            eventTypeId,
+            event_type_id,
+            user_id,
             IMEI,
             latitude,
             longitude,
@@ -90,7 +92,7 @@ export default function Sidebar({navigation}){
       RedAlert.current.focus();
       if(RedAlert){
         console.log("Boutton Rouge appuyée !")
-        SendAlert(Data.data.events[1].event_type_id)
+        SendAlert(Data.data.events[1].event_type_id,Data.data.events[1].user_id)
         //console.log(Data)
       }else{
         console.log("Boutton pas appuyée !")
@@ -105,7 +107,7 @@ export default function Sidebar({navigation}){
       YellowAlert.current.focus();
       if(YellowAlert){
         console.log("Boutton Jaune appuyée !")
-        SendAlert(Data.data.events[0].event_type_id)
+        SendAlert(Data.data.events[0].event_type_id,Data.data.events[0].user_id)
       }else{
         console.log("Boutton pas appuyée !")
       }
