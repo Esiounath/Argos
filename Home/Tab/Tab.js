@@ -21,18 +21,21 @@ export default function Tab(){
     })();
   }, [location,message]);
   async function sendSMS(){
-    const isAvailable = await SMS.isAvailableAsync();
-    if (isAvailable && location) {
-      setMessage(`Argos Network - SOS call from ${userData.username} ${date.toLocaleString().toString()} https://www.google.com/maps/search/?api=1&query=${JSON.stringify(location?.coords.latitude)},${JSON.stringify(location?.coords.longitude)}`)
-      await SMS.sendSMSAsync(`${userData.alertNumber}`,message).then((reponse)=>{
-      console.log("Envoi effectué")
-      }).catch((error)=>{
-        console.log("Erreur",error)
-      });
-    } else{
-      console.log("No location sercvies or SMS Sending is offline !")
+    try{
+      const isAvailable = await SMS.isAvailableAsync();
+      if (isAvailable && location) {
+        setMessage(`Argos Network - SOS call from ${userData.username} ${date.toLocaleString().toString()} https://www.google.com/maps/search/?api=1&query=${JSON.stringify(location?.coords.latitude)},${JSON.stringify(location?.coords.longitude)}`)
+        await SMS.sendSMSAsync(`${userData.alertNumber}`,message).then((reponse)=>{
+        }).catch((error)=>{
+          console.log("Erreur",error)
+        });
+      } else{
+        console.log("No location sercvies or SMS Sending is offline !")
+      }
+      return ;
+    }catch(error){
+      console.log(error)
     }
-    return ;
   }
 return(
     <View style={styles.tab}>

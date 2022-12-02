@@ -46,13 +46,12 @@ export default function Login({navigation}){
           username,
           password,
         },
-      }).then(async (reponse)=>{
+      }).then((reponse)=>{
         setuserToken(reponse.data.token)
         setNumber(reponse.data.alertPhoneNumbers)
         dispatch(setCredentials({userToken,username,password,number}))
         setUsername("Enter your Username")
         setPassword("")
-        console.log(reponse.data.token)
         /*await SecureStore.setItemAsync('STORAGE_USER',JSON.stringify({username,password}))
         await SecureStore.setItemAsync('STORAGE_TOKEN',JSON.stringify(userToken))*/
       }).catch((err)=>{
