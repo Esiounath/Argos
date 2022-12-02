@@ -104,9 +104,8 @@ export default function Sidebar({navigation}){
     try{
       YellowAlert.current.focus();
       if(YellowAlert){
-        console.log(Data.data.events[0].event_type_id)
         console.log("Boutton Jaune appuyée !")
-        //SendAlert(Data.data.events[0].event_type_id)
+        SendAlert(Data.data.events[0].event_type_id)
       }else{
         console.log("Boutton pas appuyée !")
       }
@@ -312,7 +311,7 @@ const styles = StyleSheet.create({
     color:"#f1f1f1"
   },
   eventAlert:{
-    flex:4,
+    flex:2,
     flexDirection:'row',
     textAlign:'center',
     alignItems:'flex-start',
@@ -330,20 +329,20 @@ const styles = StyleSheet.create({
   },
   logout:{
     color:'#000',
-    fontSize:20,
+    fontSize:22,
     fontStyle:'italic',
     fontWeight:'700',
     textTransform:'capitalize',
     textAlign:'center',
   },
   event:{
-    flex:1,
+    flex:0,
     flexDirection:'row',
     textAlign:'center',
-    alignItems:'flex-start',
+    alignItems:'center',
     justifyContent:'flex-start',
-    alignSelf:'flex-start',
-    margin:10,
+    alignSelf:'center',
+    marginBottom:5,
   },
   globe:{
     height:50,
