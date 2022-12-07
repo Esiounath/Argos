@@ -46,7 +46,9 @@
     "react-router-native": "^6.4.3",
     "redux": "^4.2.0",
     "redux-mock-store": "^1.5.4",
-    "yarn": "^1.22.19"
+    "yarn": "^1.22.19",
+    "expo-device": "~5.0.0",
+    "expo-application": "~5.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

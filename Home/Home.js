@@ -6,7 +6,9 @@ import {useSelector} from 'react-redux';
 import {useDispatch} from 'react-redux';
 import {logOut} from "../Redux/Slice";
 import * as Location from 'expo-location';
+import * as Device from 'expo-device';
 import axios from '../API/Argos_GET_USERS'
+import * as Application from 'expo-application';
 
 
 export default function Sidebar({navigation}){
@@ -34,7 +36,7 @@ export default function Sidebar({navigation}){
     await axios('/events',{
       method:'GET',
       headers:{
-        timeout:1000,
+        timeout:500,
         'content-type': 'application/json',
       },
       data:{
@@ -47,7 +49,7 @@ export default function Sidebar({navigation}){
     });
   }
   Events();
-  },6000)
+  },300)
   return () => clearTimeout(timeout);
   },[])
   useEffect(() => {
@@ -59,15 +61,21 @@ export default function Sidebar({navigation}){
         setLocation(await Location.getCurrentPositionAsync({}));      }
     })();
   }, [location]);
-  async function SendAlert(value,id){
+  async function SendAlert(){
     try{
+      console.log(status)
       if(location){   
-        const triggered_at = `${date.getFullYear().toString()}-${date.getMonth() + 1}-${date.getDate().toString()} ${date.getHours().toString()}:${date.getMinutes().toString()}:${date.getSeconds().toString().padStart(2, '0')}`;//"2022-04-25 11:33:27"
-        const event_type_id = value ;
+        Object.keys(Data.data).forEach(x => size = Object.keys(x).length)
+        for(let i = 0 ; i < size ; i++){
+        Object.entries(Data.data).forEach((x) => x.forEach((d) => Object.entries(d[i]).filter((l)=>l.includes('event_type_id')).forEach(t => {return Object.assign(status,{event_type_id:t[1]})})));
+        Object.entries(Data.data).forEach((x) => x.forEach((d) => Object.entries(d[i]).filter((l)=>l.includes('event_type')).forEach(t => t.forEach((b) => Object.entries(Object.entries(b).filter(([key])=>key.includes('id')).map((p) => {return Object.assign(status,{id:p[1]})}))))));
+        }
+        const triggered_at = `${date.getFullYear().toString()}-${date.getMonth() + 1}-${date.getDate().toString()} ${date.getHours().toString()}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;//"2022-04-25 11:33:27"
+        const event_type_id = status.event_type_id;
         const latitude = JSON.stringify(location?.coords.latitude)
         const longitude = JSON.stringify(location?.coords.longitude)
-        const IMEI = "" ;
-        const user_id = id ;
+        const IMEI = Application.androidId ;
+        const user_id = status.id ;
         const accuracy = JSON.stringify(location?.coords.accuracy) ;
         await axios('/event',{
           method:'post',
@@ -109,9 +117,7 @@ export default function Sidebar({navigation}){
     try{
       YellowAlert.current.focus();
       if(YellowAlert){
-        //SendAlert(value,id)
-        Object.entries(Data.data).forEach((x) => x.forEach((d) => Object.entries(d[0]).filter((l)=>l.includes('event_type')).forEach(t => t.forEach((b) => Object.entries(Object.entries(b).filter((l)=>l.includes('id'))).map(m => console.log(m))))));
-        Object.entries(Data.data).forEach((x) => x.forEach((d) => Object.entries(d[0]).filter((l)=>l.includes('event_type')).forEach(t => t.forEach((b) => Object.entries(b).filter((j)=>j.includes('map')).map(t => Object.entries(t).filter((l)=>l.includes('map_id')).forEach(y => console.log(y)))))));
+        SendAlert()
       }
 
     }catch(error){
