@@ -13,6 +13,15 @@ export default function Sidebar({navigation}){
   const userData = useSelector((state) => state.auth)
   const dispatch = useDispatch()
   const date = new Date()
+  let size = 0 ;
+  const [status,setStatus] = useState({
+    yellow:{
+
+    },
+    red:{
+
+    },
+  })
   const [location,setLocation] = useState(null)
   const userToken = userData.token ;
   const [ErrMsg,setErrMsg] = useState(false)
@@ -25,22 +34,20 @@ export default function Sidebar({navigation}){
     await axios('/events',{
       method:'GET',
       headers:{
-        timeout:200,
+        timeout:1000,
         'content-type': 'application/json',
       },
       data:{
         userToken,
       },
     }).then((reponse)=>{
-        setData(reponse);//data.events[4]
-        clearTimeout(timeout)
+        setData(reponse);
     }).catch((error)=>{
       console.log("Erreur",error)
     });
   }
   Events();
- // console.log(Data.data.events[1].event_type.name)
-  },100)
+  },6000)
   return () => clearTimeout(timeout);
   },[])
   useEffect(() => {
@@ -56,7 +63,7 @@ export default function Sidebar({navigation}){
     try{
       if(location){   
         const triggered_at = `${date.getFullYear().toString()}-${date.getMonth() + 1}-${date.getDate().toString()} ${date.getHours().toString()}:${date.getMinutes().toString()}:${date.getSeconds().toString().padStart(2, '0')}`;//"2022-04-25 11:33:27"
-        const event_type_id = value ;//Data.data.events[1].event_type_id
+        const event_type_id = value ;
         const latitude = JSON.stringify(location?.coords.latitude)
         const longitude = JSON.stringify(location?.coords.longitude)
         const IMEI = "" ;
@@ -91,11 +98,7 @@ export default function Sidebar({navigation}){
     try{
       RedAlert.current.focus();
       if(RedAlert){
-        console.log("Boutton Rouge appuyée !")
-        SendAlert(Data.data.events[1].event_type_id,Data.data.events[1].user_id)
-        //console.log(Data)
-      }else{
-        console.log("Boutton pas appuyée !")
+        //SendAlert(value,id)
       }
 
     }catch(error){
@@ -106,30 +109,14 @@ export default function Sidebar({navigation}){
     try{
       YellowAlert.current.focus();
       if(YellowAlert){
-        console.log("Boutton Jaune appuyée !")
-        SendAlert(Data.data.events[0].event_type_id,Data.data.events[0].user_id)
-      }else{
-        console.log("Boutton pas appuyée !")
+        //SendAlert(value,id)
+        Object.entries(Data.data).forEach((x) => x.forEach((d) => Object.entries(d[0]).filter((l)=>l.includes('event_type')).forEach(t => t.forEach((b) => Object.entries(Object.entries(b).filter((l)=>l.includes('id'))).map(m => console.log(m))))));
+        Object.entries(Data.data).forEach((x) => x.forEach((d) => Object.entries(d[0]).filter((l)=>l.includes('event_type')).forEach(t => t.forEach((b) => Object.entries(b).filter((j)=>j.includes('map')).map(t => Object.entries(t).filter((l)=>l.includes('map_id')).forEach(y => console.log(y)))))));
       }
 
     }catch(error){
       console.log(error)
     }
-  }
-  function info(value){
-    try{
-      const obj = [Data.data.events[value].event_type]
-      const picture = Object.keys(obj[0]).
-      filter((key) => key.includes('picto')).
-      reduce((cur, key) => { return Object.assign(cur, { [key]: obj[0][key]})}, {});
-      const event = Object.keys(obj[0]).
-      filter((key) => key.includes('name')).
-      reduce((cur, key) => { return Object.assign(cur, { [key]: obj[0][key]})}, {});
-      return Object.assign(event,picture)
-    }catch(error){
-      console.log(error)
-    }
-  
   }
   function NotificationsAlert(value,reference){
     return(
@@ -156,17 +143,24 @@ viewBox="0 0 50 50">
   }
   function HomeAlert(){
     try{
+      Object.keys(Data.data).forEach(x => size = Object.keys(x).length)
+      for(let i = 0 ; i < size ; i++){
+        Object.entries(Data.data).forEach((x) => x.forEach((d) => Object.entries(d[i]).filter((l)=>l.includes('event_type')).forEach(t => t.forEach(b => Object.entries(b).filter(u =>  u.includes("menace / insulte / intimidation")).forEach((t) => {return Object.assign(status.yellow,{menace:t[1],id:154})})))))//u.includes("menace / insulte / intimidation") "agression physique / vandalisme"
+        Object.entries(Data.data).forEach((x) => x.forEach((d) => Object.entries(d[i]).filter((l)=>l.includes('event_type')).forEach(t => t.forEach(b => Object.entries(b).filter(u =>  u.includes("https://secure.argos-network.com/uploads/event_type_img/3/0-action3.png")).forEach((t) => {return Object.assign(status.yellow,{url:t[1]})})))))
+        Object.entries(Data.data).forEach((x) => x.forEach((d) => Object.entries(d[i]).filter((l)=>l.includes('event_type')).forEach(t => t.forEach(b => Object.entries(b).filter(u =>  u.includes("agression physique / vandalisme")).forEach((t) => {return Object.assign(status.red,{agression:t[1],id:155})})))))//u.includes("menace / insulte / intimidation") "agression physique / vandalisme"
+        Object.entries(Data.data).forEach((x) => x.forEach((d) => Object.entries(d[i]).filter((l)=>l.includes('event_type')).forEach(t => t.forEach(b => Object.entries(b).filter(u =>  u.includes("https://secure.argos-network.com/uploads/event_type_img/3/0-action5.png")).forEach((t) => {return Object.assign(status.red,{url:t[1]})})))))
+  }
       if(Data !== null || Data !== undefined){
-        if(Object.keys(info(1)).length >= 2 && Object.keys(info(0)).length >= 2){
+        if(Object.entries(status.red).filter((f)=>f.includes(155)) === true && Object.entries(status.yellow).filter((f)=>f.includes(154)) === true){//j.includes("agression physique / vandalisme")
           return (
             <View style={styles.Home}>
           <View style={styles.HomeAlert}>
             <Pressable ref={YellowAlert} style={{flexDirection:'row',textAlign:'center',alignItems:'center',}} onPress={()=>{SendYellowAlert()}}>
                  <Image  style={styles.AlertPicture} source={{
-                   uri:info(0).picto
+                   uri:status.yellow.url
                  }}/>
                  <Text style={styles.HomeText}>
-                   {info(0).name}
+                   {status.yellow.menace}
                  </Text>
                  </Pressable>
                  <Pressable>
@@ -182,10 +176,10 @@ viewBox="0 0 50 50">
                  <View style={styles.HomeAlert}>
                  <Pressable ref={RedAlert} style={{flexDirection:'row',textAlign:'center',alignItems:'center',}} onPress={()=>{SendRedAlert()}}>
                  <Image  style={styles.AlertPicture} source={{
-                   uri:info(1).picto
+                   uri:status.red.url,
                  }}/>
                  <Text style={styles.HomeText}>
-                   {info(1).name}
+                   {status.red.agression}
                  </Text>
                  </Pressable>
                  <Pressable>
@@ -198,13 +192,55 @@ viewBox="0 0 50 50">
                  </View>
                </View>
                );
-        }else if(Object.keys(info(0)).length >= 2){
-          NotificationsAlert(info(0),YellowAlert)
-        }else if(Object.keys(info(1)).length >= 2){
-          NotificationsAlert(info(1),RedAlert)
+        }else if(Object.entries(status).filter((f)=>f.includes(154))){
+          return(          <View style={styles.Home}>
+            <View style={styles.HomeAlert}>
+              <Pressable ref={YellowAlert} style={{flexDirection:'row',textAlign:'center',alignItems:'center',}} onPress={()=>{SendYellowAlert()}}>
+                   <Image  style={styles.AlertPicture} source={{
+                     uri:status.yellow.url,
+                   }}/>
+                   <Text style={styles.HomeText}>
+                     {status.yellow.menace}
+                   </Text>
+                   </Pressable>
+                   <Pressable>
+                   <Svg x="0px" y="0px"
+  width="40" height="40"
+  viewBox="0 0 50 50">
+                      <Path d="M38.65 15.3V11h-4.3V8h4.3V3.65h3V8H46v3h-4.35v4.3ZM4.7 44q-1.2 0-2.1-.9-.9-.9-.9-2.1V15.35q0-1.15.9-2.075.9-.925 2.1-.925h7.35L15.7 8h14v3H17.1l-3.65 4.35H4.7V41h34V20h3v21q0 1.2-.925 2.1-.925.9-2.075.9Zm17-7.3q3.6 0 6.05-2.45 2.45-2.45 2.45-6.1 0-3.6-2.45-6.025Q25.3 19.7 21.7 19.7q-3.65 0-6.075 2.425Q13.2 24.55 13.2 28.15q0 3.65 2.425 6.1Q18.05 36.7 21.7 36.7Zm0-3q-2.4 0-3.95-1.575-1.55-1.575-1.55-3.975 0-2.35 1.55-3.9 1.55-1.55 3.95-1.55 2.35 0 3.925 1.55 1.575 1.55 1.575 3.9 0 2.4-1.575 3.975Q24.05 33.7 21.7 33.7Zm0-5.5Z" stroke="#f1f1f1" strokeWidth="0.5" width="30" height="30" fill="#f1f1f1" />
+                     </Svg>
+                   </Pressable>
+                   </View>
+                   </View>
+                   );
+        }else if(Object.entries(status).filter((f)=>f.includes(155))){
+          console.log("Red")
+          return(
+            <View style={styles.Home}>
+            <View style={styles.HomeAlert}>
+            <Pressable ref={RedAlert} style={{flexDirection:'row',textAlign:'center',alignItems:'center',}} onPress={()=>{SendRedAlert()}}>
+            <Image  style={styles.AlertPicture} source={{
+              uri:status.red.url,
+            }}/>
+            <Text style={styles.HomeText}>
+               {status.red.agression}
+            </Text>
+            </Pressable>
+            <Pressable>
+            <Svg x="0px" y="0px"
+width="40" height="40"
+viewBox="0 0 50 50">
+               <Path d="M38.65 15.3V11h-4.3V8h4.3V3.65h3V8H46v3h-4.35v4.3ZM4.7 44q-1.2 0-2.1-.9-.9-.9-.9-2.1V15.35q0-1.15.9-2.075.9-.925 2.1-.925h7.35L15.7 8h14v3H17.1l-3.65 4.35H4.7V41h34V20h3v21q0 1.2-.925 2.1-.925.9-2.075.9Zm17-7.3q3.6 0 6.05-2.45 2.45-2.45 2.45-6.1 0-3.6-2.45-6.025Q25.3 19.7 21.7 19.7q-3.65 0-6.075 2.425Q13.2 24.55 13.2 28.15q0 3.65 2.425 6.1Q18.05 36.7 21.7 36.7Zm0-3q-2.4 0-3.95-1.575-1.55-1.575-1.55-3.975 0-2.35 1.55-3.9 1.55-1.55 3.95-1.55 2.35 0 3.925 1.55 1.575 1.55 1.575 3.9 0 2.4-1.575 3.975Q24.05 33.7 21.7 33.7Zm0-5.5Z" stroke="#f1f1f1" strokeWidth="0.5" width="30" height="30" fill="#f1f1f1" />
+              </Svg>
+            </Pressable>
+            </View>
+            </View>
+          );
         }else{
-          return ;
+          console.log("Nope")
         }
+    }else{
+      console.log("No Data")
     }
     }catch(error){
       console.log(error)
@@ -266,7 +302,6 @@ viewBox="0 0 50 50">
       {Data !== undefined ? Onglets() : null}
     </SafeAreaView>
   );
-
   return (
     <DrawerLayoutAndroid
       ref={drawer}
@@ -288,6 +323,7 @@ viewBox="0 0 30 30" style={styles.menu}>
     <Tab/>
     </DrawerLayoutAndroid>
   );
+
 };
 
 const styles = StyleSheet.create({
