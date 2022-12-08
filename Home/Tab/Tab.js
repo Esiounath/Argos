@@ -40,6 +40,7 @@ function Tab({navigation}){
   }
 return(
     <View style={styles.tab}>
+      
     <Pressable onPress={()=>{navigation.navigate('Events')}}>
       <Image style={styles.alerts} source={require('../../Picture/AlertsReports.png')}/>
     </Pressable>

@@ -29,7 +29,7 @@ export default function Login({navigation}){
     const userData = useSelector((state) => state.auth)
    useEffect(()=>{
       if(userData.password !== null && userData.username !== null && userData.token !== null ){
-        navigation.navigate('Home')
+        navigation.navigate('Tab')
       }
     },[userData]);
 

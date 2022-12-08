@@ -23,10 +23,8 @@ function App(){
         <NavigationContainer theme={MyTheme}>
         <Stack.Navigator>
           <Stack.Screen component={Login} name="Login" options={{headerShown:false}}/>
-          <Stack.Screen component={Home} name="Home" options={{headerShown:false}}/>
-          <Stack.Screen component={Event} name="Events" options={{headerShown:false}}/>
-          <Stack.Screen component={Tab} name="Tab" options={{headerShown:true
-          }}/>
+          <Stack.Screen component={Home} name="Tab" options={{headerShown:false}}/>
+
         </Stack.Navigator>
         </NavigationContainer>
     </Provider>

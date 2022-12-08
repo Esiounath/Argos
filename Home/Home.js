@@ -7,11 +7,21 @@ import {useDispatch} from 'react-redux';
 import {logOut} from "../Redux/Slice";
 import * as Location from 'expo-location';
 import axios from '../API/Argos_GET_USERS'
+import { NavigationContainer,DefaultTheme } from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import * as Application from 'expo-application';
 
 
 export default function Sidebar({navigation}){
+  const MyTheme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      background: '#1c2833',
+    },
+  };
   const userData = useSelector((state) => state.auth)
+  const Stack = createNativeStackNavigator()
   const dispatch = useDispatch()
   const date = new Date()
   let size = 0 ;
@@ -96,6 +106,8 @@ export default function Sidebar({navigation}){
           console.log(err)
     
         });
+      }else{
+        console.log("No location")
       }
     }catch(error){
       console.log(error)
@@ -325,7 +337,6 @@ viewBox="0 0 30 30" style={styles.menu}>
       <Text style={styles.title}>Argos Network</Text>
       </SafeAreaView>
       {Data !== undefined ? HomeAlert() : null}
-      <Tab navigation={navigation}/>
     </DrawerLayoutAndroid>
   );
 
@@ -377,6 +388,16 @@ const styles = StyleSheet.create({
     fontWeight:'700',
     textTransform:'capitalize',
     textAlign:'center',
+  },
+  Events: {
+    flex: 1,
+    backgroundColor:'#1c2833',
+  },
+  text:{
+    textAlign:'center',
+    alignItems:'flex-start',
+    justifyContent:'flex-start',
+    alignSelf:'flex-start',
   },
   event:{
     flex:0,

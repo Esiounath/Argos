@@ -1,6 +1,7 @@
 import React,{useEffect} from 'react'
-import { Pressable, SafeAreaView, StyleSheet,Text,View } from 'react-native'
+import { Pressable, SafeAreaView, StyleSheet,Text} from 'react-native'
 import { useSelector } from 'react-redux';
+import Sidebar from '../Home';
 
  function Event({navigation}) {
     const userData = useSelector((state) => state.auth)
@@ -14,14 +15,26 @@ import { useSelector } from 'react-redux';
       },[userData.username,userData.password,userData.token,userData.alertNumber]);
   return (
     <SafeAreaView style={styles.Events}>
+      <Sidebar/>
+      <Pressable onPress={()=>{navigation.goBack()}}>
+        <Text style={styles.text}>
+          Eden
+        </Text>
+      </Pressable>
     </SafeAreaView>
   )
 }
-
 const styles = StyleSheet.create({
   Events: {
-    flex: 1,
-    backgroundColor:'#1c2833',
+    flex: 4,
+    backgroundColor:'red',
   },
+  text:{
+    textAlign:'center',
+    alignItems:'center',
+    justifyContent:'center',
+    alignSelf:'center',
+    margin:100,
+  }
 });
 export default Event ;
