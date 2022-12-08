@@ -4,7 +4,8 @@ import * as SMS from 'expo-sms';
 import { useSelector } from 'react-redux';
 import * as Location from 'expo-location';
 
-export default function Tab(){
+
+function Tab({navigation}){
   const userData = useSelector((state) => state.auth)
   const [location,setLocation] = useState(null)
   const [errorMsg, setErrorMsg] = useState(null);
@@ -39,7 +40,7 @@ export default function Tab(){
   }
 return(
     <View style={styles.tab}>
-    <Pressable>
+    <Pressable onPress={()=>{navigation.navigate('Events')}}>
       <Image style={styles.alerts} source={require('../../Picture/AlertsReports.png')}/>
     </Pressable>
     <Text style={styles.text}>Alerts</Text>
@@ -86,3 +87,4 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
       },
 });
+export default Tab ;

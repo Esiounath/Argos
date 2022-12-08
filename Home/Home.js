@@ -6,7 +6,6 @@ import {useSelector} from 'react-redux';
 import {useDispatch} from 'react-redux';
 import {logOut} from "../Redux/Slice";
 import * as Location from 'expo-location';
-import * as Device from 'expo-device';
 import axios from '../API/Argos_GET_USERS'
 import * as Application from 'expo-application';
 
@@ -326,7 +325,7 @@ viewBox="0 0 30 30" style={styles.menu}>
       <Text style={styles.title}>Argos Network</Text>
       </SafeAreaView>
       {Data !== undefined ? HomeAlert() : null}
-    <Tab/>
+      <Tab navigation={navigation}/>
     </DrawerLayoutAndroid>
   );
 
@@ -334,7 +333,7 @@ viewBox="0 0 30 30" style={styles.menu}>
 
 const styles = StyleSheet.create({
   Home:{
-    flexDirection:"column",
+    flexDirection:"column", 
     justifyContent:'flex-start',
     flex:3,
   },
