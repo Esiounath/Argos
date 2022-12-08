@@ -25,7 +25,8 @@ function App(){
           <Stack.Screen component={Login} name="Login" options={{headerShown:false}}/>
           <Stack.Screen component={Home} name="Home" options={{headerShown:false}}/>
           <Stack.Screen component={Event} name="Events" options={{headerShown:false}}/>
-          <Stack.Screen component={Tab} name="Tab" options={{headerShown:false}}/>
+          <Stack.Screen component={Tab} name="Tab" options={{headerShown:true
+          }}/>
         </Stack.Navigator>
         </NavigationContainer>
     </Provider>
