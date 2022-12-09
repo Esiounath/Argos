@@ -1,5 +1,5 @@
 import React,{useEffect} from 'react'
-import { Pressable, SafeAreaView, StyleSheet,View} from 'react-native'
+import { Pressable, SafeAreaView, StyleSheet,View,ScrollView,Text} from 'react-native'
 import { useSelector } from 'react-redux';
 import Svg, {Path} from 'react-native-svg';
 
@@ -15,15 +15,23 @@ import Svg, {Path} from 'react-native-svg';
       },[userData.username,userData.password,userData.token,userData.alertNumber]);
   return (
     <SafeAreaView style={styles.events}>
-      <View style={{
-        backgroundColor:'brown',flex:4
-      }}>
-
+      <View style={styles.eventlists}>
+        <ScrollView style={styles.scrollView}>
+        <Text style={styles.text}>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat. Duis aute irure dolor in
+          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+          culpa qui officia deserunt mollit anim id est laborum.
+        </Text>
+        </ScrollView>
       </View>
         <View style={styles.Backhome}>
         <Pressable onPress={()=>{navigation.navigate('Body')}}>
                  <Svg x="0px" y="0px"
-width="70" height="70"
+width="60" height="60"
 viewBox="0 0 50 50">
                     <Path d="M11 39h7.5V26.5h11V39H37V19.5L24 9.75 11 19.5Zm-3 3V18L24 6l16 12v24H26.5V29.5h-5V42Zm16-17.65Z" stroke="#f1f1f1" strokeWidth="0.5" width="30" height="30" fill="#f1f1f1" />
                    </Svg>
@@ -33,6 +41,18 @@ viewBox="0 0 50 50">
   )
 }
 const styles = StyleSheet.create({
+  eventlists:{
+    backgroundColor:'brown',
+    flex:1,
+    backgroundColor:'transparent',
+  },
+  text: {
+    fontSize: 32,
+    color:'white',
+  },
+  scrollView:{
+    marginHorizontal: 15,
+  },
   events: {
     alignItems: "center",
     flex:4,
@@ -46,7 +66,7 @@ const styles = StyleSheet.create({
     alignSelf:'center',
     alignItems: 'center',
     width:'100%',
-    height:50
+    height:40
   }
 });
 export default Event ;

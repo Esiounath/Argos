@@ -10,7 +10,6 @@ import * as Application from 'expo-application';
 
 export default function Body({navigation}){
   const userData = useSelector((state) => state.auth)
-  const [AlertValue,setAlertValue] = useState(false)
   const [errorMsg, setErrorMsg] = useState(null);
   const [message,setMessage] = useState(null)
   const date = new Date()
@@ -30,37 +29,6 @@ export default function Body({navigation}){
   const [Data,setData] = useState({})
   const RedAlert = useRef(null)
   const YellowAlert = useRef(null)
-  useEffect(()=>{
-  const timeout = setTimeout(()=>{
-      async function Events(){
-    await axios('/events',{
-      method:'GET',
-      headers:{
-        timeout:500,
-        'content-type': 'application/json',
-      },
-      data:{
-        userToken,
-      },
-    }).then((reponse)=>{
-        setData(reponse);
-    }).catch((error)=>{
-      console.log("Erreur",error)
-    });
-  }
-  Events();
-  },300)
-  return () => clearTimeout(timeout);
-  },[])
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        return;
-      }else{
-        setLocation(await Location.getCurrentPositionAsync({}));      }
-    })();
-  }, [location]);
   async function sendSMS(){
     try{
       const isAvailable = await SMS.isAvailableAsync();
@@ -81,10 +49,10 @@ export default function Body({navigation}){
   async function SendAlert(){
     try{
       if(location){   
-        Object.keys(Data.data).forEach(x => size = Object.keys(x).length)
+        Object.keys(userData.GlobalDataUser.data).forEach(x => size = Object.keys(x).length)
         for(let i = 0 ; i < size ; i++){
-        Object.entries(Data.data).forEach((x) => x.forEach((d) => Object.entries(d[i]).filter((l)=>l.includes('event_type_id')).forEach(t => {return Object.assign(status,{event_type_id:t[1]})})));
-        Object.entries(Data.data).forEach((x) => x.forEach((d) => Object.entries(d[i]).filter((l)=>l.includes('event_type')).forEach(t => t.forEach((b) => Object.entries(Object.entries(b).filter(([key])=>key.includes('id')).map((p) => {return Object.assign(status,{id:p[1]})}))))));
+        Object.entries(userData.GlobalDataUser.data).forEach((x) => x.forEach((d) => Object.entries(d[i]).filter((l)=>l.includes('event_type_id')).forEach(t => {return Object.assign(status,{event_type_id:t[1]})})));
+        Object.entries(userData.GlobalDataUser.data).forEach((x) => x.forEach((d) => Object.entries(d[i]).filter((l)=>l.includes('event_type')).forEach(t => t.forEach((b) => Object.entries(Object.entries(b).filter(([key])=>key.includes('id')).map((p) => {return Object.assign(status,{id:p[1]})}))))));
         }
         const triggered_at = `${date.getFullYear().toString()}-${date.getMonth() + 1}-${date.getDate().toString()} ${date.getHours().toString()}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;//"2022-04-25 11:33:27"
         const event_type_id = status.event_type_id;
@@ -171,14 +139,14 @@ export default function Body({navigation}){
   }
   function HomeAlert(){
     try{
-      Object.keys(Data.data).forEach(x => size = Object.keys(x).length)
+      Object.keys(userData.GlobalDataUser.data).forEach(x => size = Object.keys(x).length)
       for(let i = 0 ; i < size ; i++){
-        Object.entries(Data.data).forEach((x) => x.forEach((d) => Object.entries(d[i]).filter((l)=>l.includes('event_type')).forEach(t => t.forEach(b => Object.entries(b).filter(u =>  u.includes("menace / insulte / intimidation")).forEach((t) => {return Object.assign(status.yellow,{menace:t[1],id:154})})))))//u.includes("menace / insulte / intimidation") "agression physique / vandalisme"
-        Object.entries(Data.data).forEach((x) => x.forEach((d) => Object.entries(d[i]).filter((l)=>l.includes('event_type')).forEach(t => t.forEach(b => Object.entries(b).filter(u =>  u.includes("https://secure.argos-network.com/uploads/event_type_img/3/0-action3.png")).forEach((t) => {return Object.assign(status.yellow,{url:t[1]})})))))
-        Object.entries(Data.data).forEach((x) => x.forEach((d) => Object.entries(d[i]).filter((l)=>l.includes('event_type')).forEach(t => t.forEach(b => Object.entries(b).filter(u =>  u.includes("agression physique / vandalisme")).forEach((t) => {return Object.assign(status.red,{agression:t[1],id:155})})))))//u.includes("menace / insulte / intimidation") "agression physique / vandalisme"
-        Object.entries(Data.data).forEach((x) => x.forEach((d) => Object.entries(d[i]).filter((l)=>l.includes('event_type')).forEach(t => t.forEach(b => Object.entries(b).filter(u =>  u.includes("https://secure.argos-network.com/uploads/event_type_img/3/0-action5.png")).forEach((t) => {return Object.assign(status.red,{url:t[1]})})))))
+        Object.entries(userData.GlobalDataUser.data).forEach((x) => x.forEach((d) => Object.entries(d[i]).filter((l)=>l.includes('event_type')).forEach(t => t.forEach(b => Object.entries(b).filter(u =>  u.includes("menace / insulte / intimidation")).forEach((t) => {return Object.assign(status.yellow,{menace:t[1],id:154})})))))//u.includes("menace / insulte / intimidation") "agression physique / vandalisme"
+        Object.entries(userData.GlobalDataUser.data).forEach((x) => x.forEach((d) => Object.entries(d[i]).filter((l)=>l.includes('event_type')).forEach(t => t.forEach(b => Object.entries(b).filter(u =>  u.includes("https://secure.argos-network.com/uploads/event_type_img/3/0-action3.png")).forEach((t) => {return Object.assign(status.yellow,{url:t[1]})})))))
+        Object.entries(userData.GlobalDataUser.data).forEach((x) => x.forEach((d) => Object.entries(d[i]).filter((l)=>l.includes('event_type')).forEach(t => t.forEach(b => Object.entries(b).filter(u =>  u.includes("agression physique / vandalisme")).forEach((t) => {return Object.assign(status.red,{agression:t[1],id:155})})))))//u.includes("menace / insulte / intimidation") "agression physique / vandalisme"
+        Object.entries(userData.GlobalDataUser.data).forEach((x) => x.forEach((d) => Object.entries(d[i]).filter((l)=>l.includes('event_type')).forEach(t => t.forEach(b => Object.entries(b).filter(u =>  u.includes("https://secure.argos-network.com/uploads/event_type_img/3/0-action5.png")).forEach((t) => {return Object.assign(status.red,{url:t[1]})})))))
   }
-      if(Data !== null || Data !== undefined){
+      if(userData.GlobalDataUser.data !== null || userData.GlobalDataUser.data !== undefined){
         if(Object.entries(status.red).filter((f)=>f.includes(155)) === true && Object.entries(status.yellow).filter((f)=>f.includes(154)) === true){//j.includes("agression physique / vandalisme")
           return (
           <View style={styles.homeAlert}>

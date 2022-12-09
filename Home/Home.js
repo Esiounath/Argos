@@ -42,6 +42,7 @@ function Home({navigation}){
   function Onglets(){
     try{    
       if(Data !== null || Data !== undefined){
+        dispatch(setGlobalData({Data}))
        const prop = Object.keys(Data.data.events[0].event_type.map).
        filter((key) => key.includes('name')).
        reduce((cur, key) => { return Object.assign(cur, { [key]: Data.data.events[0].event_type.map[key] })}, {});
@@ -70,7 +71,7 @@ viewBox="0 0 50 50">
       await axios('/events',{
         method:'GET',
         headers:{
-          timeout:500,
+          timeout:1000,
           'content-type': 'application/json',
         },
         data:{
@@ -83,7 +84,7 @@ viewBox="0 0 50 50">
       });
     }
     Events();
-    },300)
+    },1000)
     return () => clearTimeout(timeout);
     },[])
     useEffect(()=>{
