@@ -189,7 +189,7 @@ viewBox="0 0 50 50">
         }else if(Object.entries(status).filter((f)=>f.includes(154))){
           return(        
             <View style={styles.homeAlert}>
-              <Pressable ref={YellowAlert} style={{flexDirection:'row',textAlign:'center',alignItems:'center'}} onPress={()=>{SendYellowAlert()}}>
+              <Pressable ref={YellowAlert} style={{flexDirection:'row',textAlign:'center',alignItems:'center',justifyContent:'space-between'}} onPress={()=>{SendYellowAlert()}}>
                    <Image  style={styles.AlertPicture} source={{
                      uri:status.yellow.url,
                    }}/>
@@ -266,7 +266,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex:4,
     alignItems:'flex-start',
-    justifyContent:'space-around',
+    justifyContent:'flex-start',
     backgroundColor:'transparent',
   },
   tab:{
@@ -313,6 +313,7 @@ const styles = StyleSheet.create({
     justifyContent:'space-around',
     alignItems:'center',
     textAlign:'flex-start',
+    width:'100%',
   },
   homeText:{
     fontSize:18,

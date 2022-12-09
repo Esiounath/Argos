@@ -71,7 +71,7 @@ viewBox="0 0 50 50">
       await axios('/events',{
         method:'GET',
         headers:{
-          timeout:1000,
+          timeout:500,
           'content-type': 'application/json',
         },
         data:{
@@ -84,7 +84,7 @@ viewBox="0 0 50 50">
       });
     }
     Events();
-    },1000)
+    },500)
     return () => clearTimeout(timeout);
     },[])
     useEffect(()=>{

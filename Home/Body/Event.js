@@ -5,6 +5,13 @@ import Svg, {Path} from 'react-native-svg';
 
  function Event({navigation}) {
     const userData = useSelector((state) => state.auth)
+    function AlertLists(){
+      Object.keys(userData.GlobalDataUser.data).forEach(x => size = Object.keys(x).length)
+      for(let i = 0 ; i < size ; i++){
+        Object.entries(userData.GlobalDataUser.data).forEach((x) => x.forEach((d) => Object.entries(d[i]).filter((l)=>l.includes('event_type'))))
+        Object.entries(userData.GlobalDataUser.data).forEach((x) => x.forEach((d) => Object.entries(d[i]).filter((l)=>l.includes('event_type')).forEach(t => t.forEach(b => Object.entries(b).filter(u =>  u.includes("menace / insulte / intimidation")).forEach((t) => {return Object.assign(status.yellow,{menace:t[1],id:154})})))))//u.includes("menace / insulte / intimidation") "agression physique / vandalisme"
+      }
+    }
     useEffect(()=>{
         const time = setTimeout(()=>{
           if(userData.password === null && userData.token === null && userData.username === null && userData.alertNumber === null){
@@ -17,15 +24,6 @@ import Svg, {Path} from 'react-native-svg';
     <SafeAreaView style={styles.events}>
       <View style={styles.eventlists}>
         <ScrollView style={styles.scrollView}>
-        <Text style={styles.text}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum.
-        </Text>
         </ScrollView>
       </View>
         <View style={styles.Backhome}>
