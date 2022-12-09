@@ -6,9 +6,14 @@ const userSlice = createSlice({
         username : null,
         token:null,
         password:null,
-        alertNumber : null
+        alertNumber : null,
+        GlobalDataUser:null,
     },
     reducers:{
+        setGlobalData:(state,action)=>{
+            const {Data} = action.payload
+            state.GlobalDataUser = Data
+        },
         setCredentials:(state,action)=>{
             const {username,userToken,password,number} = action.payload
             state.username = username
@@ -21,11 +26,12 @@ const userSlice = createSlice({
             state.token = null
             state.password = null
             state.alertNumber = null
+            state.GlobalDataUser = null 
         },
     }
 })
 
-export const {setCredentials,logOut} = userSlice.actions
+export const {setCredentials,logOut,setGlobalData} = userSlice.actions
 
 export default userSlice.reducer
 
