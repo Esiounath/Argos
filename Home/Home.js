@@ -16,6 +16,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 function Home({navigation}){
   const drawer = useRef(null);
+  let size = 0 ;
   const userData = useSelector((state) => state.auth)
   const userToken = userData.token ;
   const [location,setLocation] = useState(null)
@@ -42,7 +43,6 @@ function Home({navigation}){
   function Onglets(){
     try{    
       if(Data !== null || Data !== undefined){
-        dispatch(setGlobalData({Data}))
        const prop = Object.keys(Data.data.events[0].event_type.map).
        filter((key) => key.includes('name')).
        reduce((cur, key) => { return Object.assign(cur, { [key]: Data.data.events[0].event_type.map[key] })}, {});
@@ -78,7 +78,11 @@ viewBox="0 0 50 50">
           userToken,
         },
       }).then((reponse)=>{
-          setData(reponse);
+          try{
+            setData(reponse);
+          }catch(err){
+            console.log(err)
+          }
       }).catch((error)=>{
         console.log("Erreur",error)
       });
@@ -87,12 +91,22 @@ viewBox="0 0 50 50">
     },500)
     return () => clearTimeout(timeout);
     },[])
-    useEffect(()=>{
-      const compteur = setTimeout(()=>{
-        dispatch(setGlobalData({Data}));
-      },4000)
-      return () => clearTimeout(compteur);
-    },[])
+    if(size <= 0){
+      useEffect(()=>{
+        const compteur = setTimeout(()=>{
+          try{
+            Object.keys(Data.data).forEach(x => size = Object.keys(x).length)
+            if(Data !== null || Data !== undefined){
+              console.log(Data.data)
+            dispatch(setGlobalData({Data}));
+            return () => clearTimeout(compteur);
+            }
+          }catch(error){
+            console.log(error)
+          }
+        },1000)
+      })
+    }
   const drawerPosition = "left";
     const navigationView = () => (
       <SafeAreaView style={styles.navigationContainer}>
