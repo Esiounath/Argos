@@ -22,6 +22,13 @@ export default function Body({navigation}){
 
     },
   })
+ /* try{
+    for (const property in Data.data) {
+      console.log(Data.data[property]);
+    }
+  }catch(error){
+    
+  }*/
   const [location,setLocation] = useState(null)
   const userToken = userData.token ;
   const AlertState = useRef(null)

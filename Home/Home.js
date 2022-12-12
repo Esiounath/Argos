@@ -97,7 +97,6 @@ viewBox="0 0 50 50">
           try{
             Object.keys(Data.data).forEach(x => size = Object.keys(x).length)
             if(Data !== null || Data !== undefined){
-              console.log(Data.data)
             dispatch(setGlobalData({Data}));
             return () => clearTimeout(compteur);
             }
