@@ -1,19 +1,80 @@
 import React,{useEffect,useState} from 'react'
-import { Pressable, SafeAreaView, StyleSheet,View,ScrollView,Text} from 'react-native'
+import { Pressable, SafeAreaView, StyleSheet,View,StatusBar,Text,Image,FlatList} from 'react-native'
 import { useSelector } from 'react-redux';
 import Svg, {Path} from 'react-native-svg';
 
  function Event({navigation}) {
-  let size = 0 ;
-  const [status,setStatus] = useState({
-    yellow:{
+  const userData = useSelector((state) => state.auth)
+  const [DATA,setData] = useState([])
+  const [status,setStatus] = useState(false);
+  console.log(status)
+  let i = 0 ;
+    useEffect(()=>{
+      if(!status){
+    const compteur = setTimeout(()=>{
+      try{
+        for(  let prop = 0; prop <= userData.GlobalDataUser.data.events.length - userData.GlobalDataUser.data.events.length + 10 ; prop++){
+          i++;
+          console.log("Value i:",i)
+          setData([...DATA,{id:i,data:{
+  date_info:userData.GlobalDataUser.data.events[prop].created_at,
+    latitude : userData.GlobalDataUser.data.events[prop].latitude,
+    longitutde:userData.GlobalDataUser.data.events[prop].longitude,
+    picture:userData.GlobalDataUser.data.events[prop].event_type.picto,
+    titre:userData.GlobalDataUser.data.events[prop].event_type.map.name,
+    info:userData.GlobalDataUser.data.events[prop].event_type.name
+  }
+           }])
+        }
+        console.log(DATA)
+        setStatus(true)
+        return () => clearTimeout(compteur);
+      }catch(error){
+        return () => clearTimeout(compteur);
+      }
+    },2000)
+      }
+    },[])
+    /*
+      <View style={styles.item}>
+    <View style={{
+      flexDirection:'row',textAlign:'center',alignItems:'flex-end',justifyContent:'space-between'
+    }}>
+    <Image source={{
+      uri:picture
+    }} 
+    style={styles.picture}/>
+    </View>
+  <View style={styles.alertInfo}>
+    <Text style={styles.text}>{titre}</Text>
+    <Text style={styles.text}>{info}</Text>
+  </View>
+  </View>
+  */
+ //console.log(DATA)
+  const Item = ({data})=>{
+  try{
+    return(      <View style={styles.item}>
+          <View style={{
+      flexDirection:'row',textAlign:'center',alignItems:'flex-end',justifyContent:'space-between'
+    }}>
+      <Image source={{
+        uri:data.picture === undefined ? null : data.picture  
+      }} 
+      style={styles.picture}/>
+      </View>
+    <View style={styles.alertInfo}>
+      <Text style={styles.text}>{data.titre}</Text>
+      <Text style={styles.text}>{data.info}</Text>
+      <Text style={styles.text}>{data.date_info}</Text>
+      <Text style={styles.text}>{data.latitude}</Text>
+      <Text style={styles.text}>{data.ongitude}</Text>
+    </View>
+    </View>);
+  }catch(error){
 
-    },
-    red:{
-
-    },
-  })
-    const userData = useSelector((state) => state.auth)
+  }
+    }
     useEffect(()=>{
         const time = setTimeout(()=>{
           if(userData.password === null && userData.token === null && userData.username === null && userData.alertNumber === null){
@@ -22,27 +83,16 @@ import Svg, {Path} from 'react-native-svg';
         },200)
         return () => clearTimeout(time)
       },[userData.username,userData.password,userData.token,userData.alertNumber]);
-      function EventsLists(){
-        try{
-          Object.keys(userData.GlobalDataUser.data).forEach(x => size = Object.keys(x).length)
-          for(let i = 0 ; i < size ; i++){
-            Object.entries(userData.GlobalDataUser.data).forEach((x) => x.forEach((d) => Object.entries(d[i]).filter((l)=>l.includes('event_type')).forEach(t => t.forEach(b => Object.entries(b).filter(u =>  u.includes("menace / insulte / intimidation")).forEach((t) => {return Object.assign(status.yellow,{menace:t[1],id:154})})))))//u.includes("menace / insulte / intimidation") "agression physique / vandalisme"
-            Object.entries(userData.GlobalDataUser.data).forEach((x) => x.forEach((d) => Object.entries(d[i]).filter((l)=>l.includes('event_type')).forEach(t => t.forEach(b => Object.entries(b).filter(u =>  u.includes("https://secure.argos-network.com/uploads/event_type_img/3/0-action3.png")).forEach((t) => {return Object.assign(status.yellow,{url:t[1]})})))))
-            Object.entries(userData.GlobalDataUser.data).forEach((x) => x.forEach((d) => Object.entries(d[i]).filter((l)=>l.includes('event_type')).forEach(t => t.forEach(b => Object.entries(b).filter(u =>  u.includes("agression physique / vandalisme")).forEach((t) => {return Object.assign(status.red,{agression:t[1],id:155})})))))//u.includes("menace / insulte / intimidation") "agression physique / vandalisme"
-            Object.entries(userData.GlobalDataUser.data).forEach((x) => x.forEach((d) => Object.entries(d[i]).filter((l)=>l.includes('event_type')).forEach(t => t.forEach(b => Object.entries(b).filter(u =>  u.includes("https://secure.argos-network.com/uploads/event_type_img/3/0-action5.png")).forEach((t) => {return Object.assign(status.red,{url:t[1]})})))))
-            Object.entries(userData.GlobalDataUser.data).forEach((x) => x.forEach((d) => Object.keys(d).filter((y)=>y.includes('created_at')).forEach((t)=> {return Object.assign(status,{date:t})})));
-            Object.entries(userData.GlobalDataUser.data).forEach((x) => x.forEach((d) => Object.keys(d).filter((y)=>y.includes('latitude')).forEach((t)=> {return Object.assign(status,{latitude:t})})));
-            Object.entries(userData.GlobalDataUser.data).forEach((x) => x.forEach((d) => Object.keys(d).filter((y)=>y.includes('longitude')).forEach((t)=> {return Object.assign(status,{longitude:t})})));
-            Object.entries(Data).filter((t)=>t.includes('eden')).forEach(j => Object.entries(j).forEach( g => Object.entries(g[1]).filter((u)=>u.includes("event_type")).forEach(h => Object.entries(h[1]).filter((u)=>u.includes('map')).forEach(y => {return Object.assign(status,{city:y[1].name})}))))
-          }
-        }catch(error){
-          console.log(error)
-        }
-      }
+      const renderItem = ({ item }) => (
+        <Item data={item.data}/>
+      );
   return (
-    <SafeAreaView style={styles.events}>
-      <View style={styles.eventlists}>
-      </View>
+    <SafeAreaView style={styles.eventlists}>
+   <FlatList
+    data={DATA}
+    renderItem={renderItem}
+    keyExtractor={item => item.id}
+    />
         <View style={styles.Backhome}>
         <Pressable onPress={()=>{navigation.navigate('Body')}}>
                  <Svg x="0px" y="0px"
@@ -56,26 +106,33 @@ viewBox="0 0 50 50">
   )
 }
 const styles = StyleSheet.create({
-  eventlists:{
-    backgroundColor:'brown',
-    flex:1,
-    backgroundColor:'transparent',
+  item:{
+    flexDirection:'row',
   },
-  text: {
-    fontSize: 32,
-    color:'white',
+  text:{
+    color:'#f1f1f1',
+    fontSize:15,
+  },
+  alertInfo:{
+    justifyContent:'flex-end',
+    alignItems:'flex-end',
+    alignSelf:'center',
+    flexDirection:'column',
+    textAlign:'flex-end',
+  },
+  picture:{
+    height:80,
+    width:80,
+  },
+  eventlists:{
+    flex: 1,
+    marginTop: StatusBar.currentHeight || 0,
+    justifyContent:'space-evenly'
   },
   scrollView:{
     marginHorizontal: 15,
   },
-  events: {
-    alignItems: "center",
-    flex:4,
-    justifyContent:"center",
-    alignSelf:'center',
-  },
   Backhome:{
-    flex: 0,
     flexDirection: 'row',
     justifyContent:"flex-start",
     alignSelf:'center',
