@@ -243,16 +243,16 @@ viewBox="0 0 50 50">
     {Data !== undefined ? HomeAlert() : null}
     </View>
     <View style={styles.tab}>
-    <Pressable onPress={()=>{navigation.navigate('Event')}} ref={AlertState}>
+    <Pressable onPress={()=>{navigation.navigate('Event')}} ref={AlertState} style={{flexDirection:'row'}}>
       <Image style={styles.alerts} source={require('../../Picture/AlertsReports.png')}/>
-    </Pressable>
     <Text style={styles.text}>Alerts</Text>
+    </Pressable>
     <Pressable onPress={sendSMS}>
       <Image style={styles.sos} 
          source={require('../../Picture/sos-btn.png')}/>
     </Pressable>
+    <Pressable onPress={()=>{navigation.navigate('Map')}} style={{flexDirection:'row'}}>
     <Text style={styles.text}>Map</Text>
-    <Pressable onPress={()=>{navigation.navigate('Map')}}>
       <Image style={styles.map} source={require('../../Picture/Map.png')}/>
     </Pressable>
   </View>
@@ -272,23 +272,22 @@ const styles = StyleSheet.create({
   tab:{
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-around',
     alignItems: 'flex-end',
+    alignSelf:'stretch',
+    alignContent:'space-around',
   },
   sos:{
     height:70,
     width:70,
-    marginHorizontal:60,
   },
   alerts:{
     height:50,
     width:50,
-    marginHorizontal:60,
   },
   map:{
     height:50,
     width:50,
-    marginHorizontal:60,
   },
   text:{
     color:'#ffffff',
