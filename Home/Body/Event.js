@@ -6,16 +6,23 @@ import Svg, {Path} from 'react-native-svg';
  function Event({navigation}) {
   const userData = useSelector((state) => state.auth)
   const [status,setStatus] = useState(false);
-  console.log(status)
  const [size,setSize] = useState(20);
   const DATA = [];
+  /*const [Difference_In_Days,setDifference_In_Days] = useState()
+  useEffect(() => {
+    setTimeout(() => {
+   for(  let i = 0; i <= size; i++){   
+    setDifference_In_Days(Math.round((Date.now() - Date.parse(userData.GlobalDataUser.data.events[i].created_at.replace('-','/').replace('-','/')))/(1000 * 3600 * 24 * 7)))
+   }
+   setStatus(!status)
+    },15000);
+  });*/
  try{
   for(  let prop = 0; prop <= size; prop++){
-    //console.log("Value size:",size)
       DATA.push({key:Math.random().toString(12).substring(0),data:{
         date_info:userData.GlobalDataUser.data.events[prop].created_at,
-          latitude : userData.GlobalDataUser.data.events[prop].latitude,
-          longitutde:userData.GlobalDataUser.data.events[prop].longitude,
+          latitude:userData.GlobalDataUser.data.events[prop].latitude,
+          longitude:userData.GlobalDataUser.data.events[prop].longitude,
           picture:userData.GlobalDataUser.data.events[prop].event_type.picto,
           titre:userData.GlobalDataUser.data.events[prop].event_type.map.name,
           info:userData.GlobalDataUser.data.events[prop].event_type.name
@@ -24,8 +31,7 @@ import Svg, {Path} from 'react-native-svg';
     }
  }catch (e) {
  }
-     
-    console.log(DATA.key)
+
   const Item = ({data})=>(
   <View style={styles.item}>
     <View style={{textAlign:'center',alignItems:'center'
@@ -38,9 +44,9 @@ style={styles.picture}/>
 <View style={styles.alertInfo}>
 <Text style={styles.text}>{data.titre}</Text>
 <Text style={styles.text}>{data.info}</Text>
-<Text style={styles.text}>{data.date_info}</Text>
 <Text style={styles.text}>{data.latitude}</Text>
 <Text style={styles.text}>{data.longitude}</Text>
+<Text style={styles.text}>{data.date_info}</Text>
 </View>
 </View>
   )
@@ -55,20 +61,25 @@ style={styles.picture}/>
       const renderItem = ({ item }) => (
         <Item data={item.data} />
       );
-    
+    const BottomComponent =()=>(
+      <View style={styles.more}>
+      <Pressable onPress={()=>setSize(size + 5)}>
+      <Svg x="0px" y="0px"
+      width="50" height="50"
+      viewBox="0 -5 50 50"><Path d="M22.5 38V25.5H10v-3h12.5V10h3v12.5H38v3H25.5V38Z" stroke="#f1f1f1" strokeWidth="0.5" width="30" height="30" fill="#f1f1f1" />
+      </Svg>
+      </Pressable>
+      </View>
+    );
   return (
     <SafeAreaView style={styles.eventlists}>
    <FlatList
     data={DATA}
     renderItem={renderItem}
     keyExtractor={(item) => item.key}
+    ListFooterComponent={BottomComponent}
+    ListFooterComponentStyle={styles.listFooter}
     />
-    <View style={styles.more}>
-<Svg x="0px" y="0px"
-width="30" height="30"
-viewBox="0 -5 50 50"><Path d="M22.5 38V25.5H10v-3h12.5V10h3v12.5H38v3H25.5V38Z" stroke="#f1f1f1" strokeWidth="0.5" width="30" height="30" fill="#f1f1f1" />
-</Svg>
-</View>
         <View style={styles.tab}>
     <Pressable onPress={()=>{navigation.navigate('Body')}} style={{flexDirection:'row'}}>
     <Svg x="0px" y="0px"
@@ -91,13 +102,13 @@ viewBox="0 -5 50 50">
   )
 }
 const styles = StyleSheet.create({
-  more:{alignItems:'center',alignSelf:'center'},
+  listFooter:{alignItems:'center',alignSelf:'center',justifyContent:'center'},
   tab:{
     flex: 0,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignSelf:'stretch',
-    alignItems: 'flex-end',
+    alignItems: 'center',
   },
   textBottom:{
       color:'#ffffff',
@@ -115,6 +126,7 @@ const styles = StyleSheet.create({
     textAlign:'center',
   },
   alertInfo:{
+    marginTop:8,
     justifyContent:'center',
     alignItems:'flex-end',
     alignSelf:'flex-end',

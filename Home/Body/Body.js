@@ -23,9 +23,8 @@ export default function Body({navigation}){
     },
   })
   const [location,setLocation] = useState(null)
-  const userToken = userData.token ;
   const AlertState = useRef(null)
-  const [ErrMsg,setErrMsg] = useState(false)
+  //const [ErrMsg,setErrMsg] = useState(false)
   const [Data,setData] = useState({})
   const RedAlert = useRef(null)
   const YellowAlert = useRef(null)
