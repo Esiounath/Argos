@@ -8,8 +8,16 @@ const userSlice = createSlice({
         password:null,
         alertNumber : null,
         GlobalDataUser:null,
+        PageDataInformation:null,
     },
     reducers:{
+        setPageDataInformation:(state,action)=>{
+            const {data} = action.payload
+            state.PageDataInformation = data
+        },
+        deletePageDataInformation:(state,action)=>{
+            state.PageDataInformation = null
+        },
         setGlobalData:(state,action)=>{
             const {Data} = action.payload
             state.GlobalDataUser = Data
@@ -31,7 +39,7 @@ const userSlice = createSlice({
     }
 })
 
-export const {setCredentials,logOut,setGlobalData} = userSlice.actions
+export const {setCredentials,logOut,setGlobalData,setPageDataInformation,deletePageDataInformation} = userSlice.actions
 
 export default userSlice.reducer
 

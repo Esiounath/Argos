@@ -1,26 +1,22 @@
-import React,{useEffect,useState} from 'react'
-import { Pressable, SafeAreaView, StyleSheet,View,StatusBar,Text,Image,FlatList,ScrollView} from 'react-native'
+import React,{useState} from 'react'
+import { Pressable, SafeAreaView, StyleSheet,View,Text,Image,} from 'react-native'
 import { useSelector } from 'react-redux';
 import Svg, {Path} from 'react-native-svg';
+import { setPageDataInformation } from '../../Redux/Slice';
+import {useDispatch} from 'react-redux';
+import { FlashList } from '@shopify/flash-list';
 
  function Event({navigation}) {
   const userData = useSelector((state) => state.auth)
-  const [status,setStatus] = useState(false);
+  const dispatch = useDispatch();
+  //const [status,setStatus] = useState(false);
  const [size,setSize] = useState(20);
   const DATA = [];
-  /*const [Difference_In_Days,setDifference_In_Days] = useState()
-  useEffect(() => {
-    setTimeout(() => {
-   for(  let i = 0; i <= size; i++){   
-    setDifference_In_Days(Math.round((Date.now() - Date.parse(userData.GlobalDataUser.data.events[i].created_at.replace('-','/').replace('-','/')))/(1000 * 3600 * 24 * 7)))
-   }
-   setStatus(!status)
-    },15000);
-  });*/
  try{
   for(  let prop = 0; prop <= size; prop++){
-      DATA.push({key:Math.random().toString(12).substring(0),data:{
-        date_info:userData.GlobalDataUser.data.events[prop].created_at,
+      DATA.push({data:{
+        key:Math.random().toString(12).substring(0),
+        date_info:userData.GlobalDataUser.data.events[prop].created_at.replace('-','/').replace('-','/'),
           latitude:userData.GlobalDataUser.data.events[prop].latitude,
           longitude:userData.GlobalDataUser.data.events[prop].longitude,
           picture:userData.GlobalDataUser.data.events[prop].event_type.picto,
@@ -31,10 +27,22 @@ import Svg, {Path} from 'react-native-svg';
     }
  }catch (e) {
  }
+const SelectTask = (data)=>{
+  dispatch(setPageDataInformation({data}));
+  navigation.navigate('PageEventInfo');
+}
+const ItemSeparator = () => <View style={{
+  height: 1,
+  backgroundColor: "#f1f1f1",
+  marginLeft: 10,
+  marginRight: 10,
+}}
 
+/>
   const Item = ({data})=>(
   <View style={styles.item}>
-    <View style={{textAlign:'center',alignItems:'center'
+    <Pressable style={styles.button} onPress={()=>SelectTask(data)}>
+    <View style={{textAlign:'center',alignItems:'flex-start',alignSelf:'flex-start'
 }}>
 <Image source={{
   uri:data.picture === undefined ? null : data.picture  
@@ -48,16 +56,9 @@ style={styles.picture}/>
 <Text style={styles.text}>{data.longitude}</Text>
 <Text style={styles.text}>{data.date_info}</Text>
 </View>
+</Pressable>
 </View>
   )
-    useEffect(()=>{
-        const time = setTimeout(()=>{
-          if(userData.password === null && userData.token === null && userData.username === null && userData.alertNumber === null){
-            navigation.navigate('Login')
-          }
-        },200)
-        return () => clearTimeout(time)
-      },[userData.username,userData.password,userData.token,userData.alertNumber]);
       const renderItem = ({ item }) => (
         <Item data={item.data} />
       );
@@ -73,12 +74,14 @@ style={styles.picture}/>
     );
   return (
     <SafeAreaView style={styles.eventlists}>
-   <FlatList
+   <FlashList
     data={DATA}
+    ItemSeparatorComponent={ItemSeparator}
     renderItem={renderItem}
-    keyExtractor={(item) => item.key}
+    keyExtractor={(item) => item.data.key}
     ListFooterComponent={BottomComponent}
     ListFooterComponentStyle={styles.listFooter}
+    estimatedItemSize={514}
     />
         <View style={styles.tab}>
     <Pressable onPress={()=>{navigation.navigate('Body')}} style={{flexDirection:'row'}}>
@@ -117,7 +120,13 @@ const styles = StyleSheet.create({
   },
   item:{
     flexDirection:'row',
-    justifyContent:'space-evenly',
+    justifyContent:'space-between',
+    alignItems:'center',
+    alignSelf:'center',
+  },
+  button:{
+    justifyContent:'space-between',
+    flexDirection:'row',
   },
   text:{
     color:'#f1f1f1',
@@ -127,10 +136,10 @@ const styles = StyleSheet.create({
   },
   alertInfo:{
     marginTop:8,
-    justifyContent:'center',
+    justifyContent:'flex-end',
     alignItems:'flex-end',
     alignSelf:'flex-end',
-    textAlign:'center',
+    textAlign:'flex-end',
   },
   picture:{
     height:80,
@@ -145,13 +154,9 @@ const styles = StyleSheet.create({
     width:50,
   },
   eventlists:{
-    flex: 5,
+    flex: 4,
    width:'100%',
    height:'100%',
-    justifyContent:'space-evenly'
-  },
-  scrollView:{
-    marginHorizontal: 15,
   },
   Backhome:{
     flexDirection: 'row',

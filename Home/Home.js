@@ -2,6 +2,7 @@ import React,{useState,useEffect,useRef} from 'react'
 import { Pressable,Image,View,StyleSheet,Text,DrawerLayoutAndroid,SafeAreaView} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {setGlobalData} from "../Redux/Slice";
+import PageEventInfo from './Body/PageEventInfo'
 import Svg, {Path} from 'react-native-svg';
 import Event from './Body/Event';
 import Carte from './Body/Map'
@@ -159,6 +160,7 @@ viewBox="0 0 30 30" style={styles.menu}>
           <Stack.Screen component={Body} name="Body" options={{headerShown:false}}/>
           <Stack.Screen component={Event} name="Event" options={{headerShown:false}}/>
           <Stack.Screen component={Carte} name="Map" options={{headerShown:false}}/>
+          <Stack.Screen component={PageEventInfo} name="PageEventInfo" options={{headerShown:false}}/>
         </Stack.Navigator>
   </DrawerLayoutAndroid>
 );
