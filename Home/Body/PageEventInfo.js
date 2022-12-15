@@ -8,7 +8,6 @@ import Svg, {Path} from 'react-native-svg';
 export default function PageEventInfo({navigation}) {
     const Information = useSelector((state) => state.auth)
     const dispatch = useDispatch();
-    console.log(Information.PageDataInformation)
     const ExitPage = (value) =>{
         dispatch(deletePageDataInformation) ;
         navigation.navigate(value);
