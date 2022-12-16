@@ -5,20 +5,11 @@ import { useDispatch } from 'react-redux';
 import { setCredentials } from '../Redux/Slice';
 import { useSelector } from 'react-redux';
 import NetInfo from '@react-native-community/netinfo';
-import * as SecureStore from 'expo-secure-store';
 
 
-async function getValueFor(key) {
-  let result = await SecureStore.getItemAsync(key);
-  if (result) {
-    return result ;
-  }
-}
 export default function Login({navigation}){
     const [username,setUsername] = useState("Username");
     const [password,setPassword] = useState("");
-   /* const CookiesUser = getValueFor('STORAGE_USER')
-    const CookiesPassword = getValueFor('STORAGE_PASSWORD')*/
     const [errMsg,setErrMsg] = useState('')
     const [userToken,setuserToken] = useState()
     const [number,setNumber] = useState()

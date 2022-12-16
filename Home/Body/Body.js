@@ -48,11 +48,11 @@ export default function Body({navigation}){
   async function SendAlert(){
     try{
       if(location){   
-        Object.keys(userData.GlobalDataUser.data).forEach(x => size = Object.keys(x).length)
+/*        Object.keys(userData.GlobalDataUser.data).forEach(x => size = Object.keys(x).length)
         for(let i = 0 ; i < size ; i++){
         Object.entries(userData.GlobalDataUser.data).forEach((x) => x.forEach((d) => Object.entries(d[i]).filter((l)=>l.includes('event_type_id')).forEach(t => {return Object.assign(status,{event_type_id:t[1]})})));
         Object.entries(userData.GlobalDataUser.data).forEach((x) => x.forEach((d) => Object.entries(d[i]).filter((l)=>l.includes('event_type')).forEach(t => t.forEach((b) => Object.entries(Object.entries(b).filter(([key])=>key.includes('id')).map((p) => {return Object.assign(status,{id:p[1]})}))))));
-        }
+        }*/
         const triggered_at = `${date.getFullYear().toString()}-${date.getMonth() + 1}-${date.getDate().toString()} ${date.getHours().toString()}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;//"2022-04-25 11:33:27"
         const event_type_id = status.event_type_id;
         const latitude = JSON.stringify(location?.coords.latitude)
@@ -118,7 +118,7 @@ export default function Body({navigation}){
     try{
       RedAlert.current.focus();
       if(RedAlert){
-        //SendAlert(value,id)
+        SendAlert(value,id)
       }
 
     }catch(error){
@@ -144,9 +144,12 @@ export default function Body({navigation}){
         Object.entries(userData.GlobalDataUser.data).forEach((x) => x.forEach((d) => Object.entries(d[i]).filter((l)=>l.includes('event_type')).forEach(t => t.forEach(b => Object.entries(b).filter(u =>  u.includes("https://secure.argos-network.com/uploads/event_type_img/3/0-action3.png")).forEach((t) => {return Object.assign(status.yellow,{url:t[1]})})))))
         Object.entries(userData.GlobalDataUser.data).forEach((x) => x.forEach((d) => Object.entries(d[i]).filter((l)=>l.includes('event_type')).forEach(t => t.forEach(b => Object.entries(b).filter(u =>  u.includes("agression physique / vandalisme")).forEach((t) => {return Object.assign(status.red,{agression:t[1],id:155})})))))//u.includes("menace / insulte / intimidation") "agression physique / vandalisme"
         Object.entries(userData.GlobalDataUser.data).forEach((x) => x.forEach((d) => Object.entries(d[i]).filter((l)=>l.includes('event_type')).forEach(t => t.forEach(b => Object.entries(b).filter(u =>  u.includes("https://secure.argos-network.com/uploads/event_type_img/3/0-action5.png")).forEach((t) => {return Object.assign(status.red,{url:t[1]})})))))
+        Object.entries(userData.GlobalDataUser.data).forEach((x) => x.forEach((d) => Object.entries(d[i]).filter((l)=>l.includes('event_type_id')).forEach(t => {return Object.assign(status,{event_type_id:t[1]})})));
+        Object.entries(userData.GlobalDataUser.data).forEach((x) => x.forEach((d) => Object.entries(d[i]).filter((l)=>l.includes('event_type')).forEach(t => t.forEach((b) => Object.entries(Object.entries(b).filter(([key])=>key.includes('id')).map((p) => {return Object.assign(status,{id:p[1]})}))))));
   }
       if(userData.GlobalDataUser.data !== null || userData.GlobalDataUser.data !== undefined){
-        if(Object.entries(status.red).filter((f)=>f.includes(155)) === true && Object.entries(status.yellow).filter((f)=>f.includes(154)) === true){//j.includes("agression physique / vandalisme")
+        console.log(status)
+        if(Object.keys(status.red).length === 3 && Object.keys(status.yellow).length === 3){//j.includes("agression physique / vandalisme")
           return (
           <View style={styles.homeAlert}>
             <Pressable ref={YellowAlert} style={{flexDirection:'row',textAlign:'center',alignItems:'center',}} onPress={()=>{SendYellowAlert()}}>
@@ -185,7 +188,7 @@ viewBox="0 0 50 50">
                  </View>
                </View>
                );
-        }else if(Object.entries(status).filter((f)=>f.includes(154))){
+        }else if(Object.keys(status.yellow).length === 3){
           return(        
             <View style={styles.homeAlert}>
               <Pressable ref={YellowAlert} style={{flexDirection:'row',textAlign:'center',alignItems:'center',justifyContent:'space-between'}} onPress={()=>{SendYellowAlert()}}>
@@ -205,7 +208,7 @@ viewBox="0 0 50 50">
                    </Pressable>
                    </View>
                    );
-        }else if(Object.entries(status).filter((f)=>f.includes(155))){
+        }else if(Object.keys(status.red).length === 3){
           console.log("Red")
           return(
             <View style={styles.homeAlert}>

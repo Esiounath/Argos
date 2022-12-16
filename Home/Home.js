@@ -30,7 +30,7 @@ function Home({navigation}){
     ...DefaultTheme,
     colors: {
       ...DefaultTheme.colors,
-      background: '#1c2833',
+      background: '#f1f1f1',
     },
   };
   useEffect(()=>{
