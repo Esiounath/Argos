@@ -1,18 +1,23 @@
+//Fonctionnalité principales de React & React Native
 import React,{useState} from 'react'
 import { Pressable, SafeAreaView, StyleSheet,View,Text,Image,} from 'react-native'
 import { useSelector } from 'react-redux';
+//SVG
 import Svg, {Path} from 'react-native-svg';
 import { setPageDataInformation } from '../../Redux/Slice';
 import {useDispatch} from 'react-redux';
+//Fonction Liste Déroulante
 import { FlashList } from '@shopify/flash-list';
 
  function Event({navigation}) {
   const userData = useSelector((state) => state.auth)
+  //Fonction de récupartion de Redux comme Seteur
   const dispatch = useDispatch();
   //const [status,setStatus] = useState(false);
  const [size,setSize] = useState(20);
   const DATA = [];
  try{
+  //Récupération dans un le Tableau Data et enregistrement des Evènements de la liste Déroulante
   for(  let prop = 0; prop <= size; prop++){
       DATA.push({data:{
         key:Math.random().toString(12).substring(0),
@@ -31,6 +36,7 @@ const SelectTask = (data)=>{
   dispatch(setPageDataInformation({data}));
   navigation.navigate('PageEventInfo');
 }
+//Séparation des case de la liste déroulante
 const ItemSeparator = () => <View style={{
   height: 1,
   backgroundColor: "#f1f1f1",
@@ -40,6 +46,7 @@ const ItemSeparator = () => <View style={{
 
 />
   const Item = ({data})=>(
+    //Rendu de la Liste Déroulante des évenènements 
   <View style={styles.item}>
     <Pressable style={styles.button} onPress={()=>SelectTask(data)}>
     <View style={{textAlign:'center',alignItems:'flex-start',alignSelf:'flex-start'
@@ -62,6 +69,7 @@ style={styles.picture}/>
       const renderItem = ({ item }) => (
         <Item data={item.data} />
       );
+      //Boutton === ++++++++++++++++++++++++
     const BottomComponent =()=>(
       <View style={styles.more}>
       <Pressable onPress={()=>setSize(size + 5)}>
@@ -72,6 +80,7 @@ style={styles.picture}/>
       </Pressable>
       </View>
     );
+    //rendu principale de la page D'evènements
   return (
     <SafeAreaView style={styles.eventlists}>
    <FlashList
@@ -104,6 +113,7 @@ viewBox="0 -5 50 50">
     </SafeAreaView>
   )
 }
+//Style CSS
 const styles = StyleSheet.create({
   listFooter:{alignItems:'center',alignSelf:'center',justifyContent:'center'},
   tab:{

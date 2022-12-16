@@ -1,16 +1,26 @@
+//Fonctionnalités principale de React & React Native
 import React, {useRef,useEffect, useState} from "react";
 import {Image,SafeAreaView,Text, StyleSheet, Pressable,View} from "react-native";
+//SVG
 import Svg, {Path} from 'react-native-svg';
+
+//Selection des données stockée dans Slice.js Argos/Redux données général
 import {useSelector} from 'react-redux';
+//Permissions de localisation
 import * as Location from 'expo-location';
+//Expo envoi SMS
 import * as SMS from 'expo-sms';
 import axios from '../../API/Argos_GET_USERS'
+//Accès IMEI de l'appareil de l'utilsateur
 import * as Application from 'expo-application';
 
-
+/*La {navigation sert à naviguer entre les pages annexe en ajoutant {navigation} cela permet la navigation parallèle entre les pages 
+en ajoutant le nom de la Page exemple : Body ou Home ou Events ou PageEventInfo avec la redirection avec la fonction : navigation.navigate(nom de la page avec name ="")  */
 export default function Body({navigation}){
+  //Données général de Redux 
   const userData = useSelector((state) => state.auth)
   const [errorMsg, setErrorMsg] = useState(null);
+  //Message Modal
   const [message,setMessage] = useState(null)
   const date = new Date()
   let size = 0 ;
@@ -22,12 +32,15 @@ export default function Body({navigation}){
 
     },
   })
+  //état de la location courante
   const [location,setLocation] = useState(null)
   const AlertState = useRef(null)
   //const [ErrMsg,setErrMsg] = useState(false)
+  //état des données de l'utilisateur (password,username,token)
   const [Data,setData] = useState({})
   const RedAlert = useRef(null)
   const YellowAlert = useRef(null)
+  //Fonction Envoi SMS Asyncrhone 
   async function sendSMS(){
     try{
       const isAvailable = await SMS.isAvailableAsync();
@@ -45,6 +58,7 @@ export default function Body({navigation}){
       console.log(error)
     }
   }
+  //Envoi d'alertes des boutton jaune et rouge à Argos Network
   async function SendAlert(){
     try{
       if(location){   
@@ -53,6 +67,7 @@ export default function Body({navigation}){
         Object.entries(userData.GlobalDataUser.data).forEach((x) => x.forEach((d) => Object.entries(d[i]).filter((l)=>l.includes('event_type_id')).forEach(t => {return Object.assign(status,{event_type_id:t[1]})})));
         Object.entries(userData.GlobalDataUser.data).forEach((x) => x.forEach((d) => Object.entries(d[i]).filter((l)=>l.includes('event_type')).forEach(t => t.forEach((b) => Object.entries(Object.entries(b).filter(([key])=>key.includes('id')).map((p) => {return Object.assign(status,{id:p[1]})}))))));
         }*/
+        //Infomations Relatifs des données de l'utilisateurs
         const triggered_at = `${date.getFullYear().toString()}-${date.getMonth() + 1}-${date.getDate().toString()} ${date.getHours().toString()}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;//"2022-04-25 11:33:27"
         const event_type_id = status.event_type_id;
         const latitude = JSON.stringify(location?.coords.latitude)
@@ -60,6 +75,7 @@ export default function Body({navigation}){
         const IMEI = Application.androidId ;
         const user_id = status.id ;
         const accuracy = JSON.stringify(location?.coords.accuracy) ;
+        //envoi des données à partir du des boutton de menace ou agression avec les données !
         await axios('/event',{
           method:'post',
           timeout:500,
@@ -87,6 +103,8 @@ export default function Body({navigation}){
       console.log(error)
     }
   }
+
+  //Permissions de localisation de l'utilisateur
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -97,6 +115,7 @@ export default function Body({navigation}){
         setLocation(await Location.getCurrentPositionAsync({}));      }
     })();
   }, [location,message]);
+//Envoi SMS du boutton SOS
   async function sendSMS(){
     try{
       const isAvailable = await SMS.isAvailableAsync();
@@ -114,6 +133,7 @@ export default function Body({navigation}){
       console.log(error)
     }
   }
+  //Fonction d'envoi du boutton rouge d'alertes
   function SendRedAlert(){
     try{
       RedAlert.current.focus();
@@ -125,6 +145,7 @@ export default function Body({navigation}){
       console.log(error)
     }
   }
+    //Fonction d'envoi du boutton Jaune d'alertes
   function SendYellowAlert(){
     try{
       YellowAlert.current.focus();
@@ -136,6 +157,7 @@ export default function Body({navigation}){
       console.log(error)
     }
   }
+  /*Récupération des données utilisateurs menace ou agression physique avec le nom , les images pour former les bouttons rouge et jaune */
   function HomeAlert(){
     try{
       Object.keys(userData.GlobalDataUser.data).forEach(x => size = Object.keys(x).length)
@@ -148,7 +170,8 @@ export default function Body({navigation}){
         Object.entries(userData.GlobalDataUser.data).forEach((x) => x.forEach((d) => Object.entries(d[i]).filter((l)=>l.includes('event_type')).forEach(t => t.forEach((b) => Object.entries(Object.entries(b).filter(([key])=>key.includes('id')).map((p) => {return Object.assign(status,{id:p[1]})}))))));
   }
       if(userData.GlobalDataUser.data !== null || userData.GlobalDataUser.data !== undefined){
-        console.log(status)
+        //console.log(status)
+        //Rendu des bouttons Rouge et Jaune d'agression ou de menace
         if(Object.keys(status.red).length === 3 && Object.keys(status.yellow).length === 3){//j.includes("agression physique / vandalisme")
           return (
           <View style={styles.homeAlert}>
@@ -189,6 +212,7 @@ viewBox="0 0 50 50">
              </View>
                </View>
                );
+               //Uniquement le boutton Jaune
         }else if(Object.keys(status.yellow).length === 3){
           return(        
             <View style={styles.homeAlert}>
@@ -209,6 +233,7 @@ viewBox="0 0 50 50">
                    </Pressable>
                    </View>
                    );
+                   //Uniquement le boutton rouge
         }else if(Object.keys(status.red).length === 3){
           console.log("Red")
           return(
@@ -240,6 +265,7 @@ viewBox="0 0 50 50">
       console.log(error)
     }
   }
+  //Rendu principale du Body enfant de la Page d'acceuille !
   return (
       <SafeAreaView style={styles.header}>
             <View style={styles.home}>
@@ -263,7 +289,7 @@ viewBox="0 0 50 50">
   );
 
 };
-
+//Style CSS
 const styles = StyleSheet.create({
   header:{ 
     alignItems: "center",

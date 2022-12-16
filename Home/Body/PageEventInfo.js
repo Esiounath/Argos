@@ -1,17 +1,22 @@
 import React from 'react'
 import { SafeAreaView, Text,StyleSheet,View,Pressable,Image } from 'react-native'
+      //Appels de la fonction de remise à zéro des informations de click de la liste déroulante des Events
 import {useDispatch} from 'react-redux';
 import { useSelector } from 'react-redux'
 import { deletePageDataInformation } from '../../Redux/Slice';
 import Svg, {Path} from 'react-native-svg';
-
+/*Page individuel du click des clicks de boutton d'alertes cette page va afficher les informations des alertes clické et
+ ensuite effacés en cas de click sur la liste déroulante  */
 export default function PageEventInfo({navigation}) {
     const Information = useSelector((state) => state.auth)
     const dispatch = useDispatch();
     const ExitPage = (value) =>{
+      //Fonction de remise à zéro des informations de click de la liste déroulante des Events
         dispatch(deletePageDataInformation) ;
+        //Retour de navigation d'une page à l'autre
         navigation.navigate(value);
     }
+    //Rendu Principale de la page 
   return (
     <SafeAreaView style={{
         flex: 4,

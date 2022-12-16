@@ -1,21 +1,40 @@
+//Fonctionnalités principale de React et React Native
 import React,{useState,useEffect,useRef} from 'react'
 import { Pressable,Image,View,StyleSheet,Text,DrawerLayoutAndroid,SafeAreaView} from 'react-native';
-import {useDispatch} from 'react-redux';
+
+//fonction de modification 
 import {setGlobalData} from "../Redux/Slice";
+
+//Page individuel du click au liée à la page d'events 
 import PageEventInfo from './Body/PageEventInfo'
+
+//SVG
 import Svg, {Path} from 'react-native-svg';
+
+//Page de la Carte et les Evènements ainsi que le Body dans le Stack Navigator pour la navigation entre page 
 import Event from './Body/Event';
 import Carte from './Body/Map'
 import Body from './Body/Body';
+
+//Redux Déconnexion et récupération de données
 import { logOut } from '../Redux/Slice';
 import { useSelector } from 'react-redux';
+import {useDispatch} from 'react-redux';
+
+//API requête POST
 import axios from '../API/Argos_GET_USERS'
+
+//Localisation avec Expo
 import * as Location from 'expo-location';
-import {DefaultTheme } from '@react-navigation/native'
+
+//Composant de navigation entre les Pages de Argos Network
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import {DefaultTheme } from '@react-navigation/native'
 
-
+/*La {navigation sert à naviguer entre les pages annexe en ajoutant {navigation} cela permet la navigation parallèle entre les pages 
+en ajoutant le nom de la Paage exemple : Login ou Home avec la redirection avec la fonction : navigation.navigate(nom de la page avec name ="") */
 function Home({navigation}){
+ /*Zone de déclaration des variables useState afin de pouvoir récuperer les données utilisateurs ! */
   const drawer = useRef(null);
   let size = 0 ;
   const userData = useSelector((state) => state.auth)
@@ -33,6 +52,8 @@ function Home({navigation}){
       background: '#f1f1f1',
     },
   };
+  /*Le code juste en dessous permet la vérification en cas de déconnexion de l'utilisateur et ainsi vérifier les données en backups dans le fichier Slice.js --> 
+    Argos/Redux/Slice*/
   useEffect(()=>{
     const time = setTimeout(()=>{
       if(userData.password === null && userData.token === null && userData.username === null && userData.alertNumber === null){
@@ -41,6 +62,7 @@ function Home({navigation}){
     },200)
     return () => clearTimeout(time)
   },[userData.username,userData.password,userData.token,userData.alertNumber]);
+  /* La fonction Onglets correspond à la fonction permettant la récupération des alertes dans la page de slide de déconnexion */
   function Onglets(){
     try{    
       if(Data !== null || Data !== undefined){
@@ -48,6 +70,7 @@ function Home({navigation}){
        filter((key) => key.includes('name')).
        reduce((cur, key) => { return Object.assign(cur, { [key]: Data.data.events[0].event_type.map[key] })}, {});
        for(const size in Object.keys(prop)){
+        //Rendu des Alertes de la fenêtre laterale gauche !
           return( 
             <View style={styles.eventAlert}>
               <Svg x="0px" y="0px"
@@ -66,6 +89,8 @@ viewBox="0 0 50 50">
     console.log(error)
     }
   }
+  /* Le UseEffect va permettre d'exécuter la requête au serveur afin de récuprer 
+  les données dans le Token de l'utilisateur axios est l'API utilisée afin d'effectuer les requêtes GET et POST !*/
   useEffect(()=>{
     const timeout = setTimeout(()=>{
         async function Events(){
@@ -93,6 +118,8 @@ viewBox="0 0 50 50">
     return () => clearTimeout(timeout);
     },[])
     if(size <= 0){
+      /*Cette fonction permet de définir la taille du json envoyée précedement avec la requêtes GET de 
+      l'utilisateur afin de définir la taille des lignes du retour JSON et effctuer le dispatch et l'envoi de données à Redux */
       useEffect(()=>{
         const compteur = setTimeout(()=>{
           try{
@@ -108,6 +135,8 @@ viewBox="0 0 50 50">
       })
     }
   const drawerPosition = "left";
+  /*naviationView correspond au rendu concernant le slide gauche de la page d'acceuille 
+  avec la nom d'utilisateur & le boutton de déconnexion de l'utilisateur ainsi que les Alertes national ou paq */
     const navigationView = () => (
       <SafeAreaView style={styles.navigationContainer}>
         <View style={styles.container}>
@@ -129,6 +158,7 @@ viewBox="0 0 50 50">
         {Data !== undefined ? Onglets() : null}
       </SafeAreaView>
     );
+    /*Permission d'accès à la localisation utilisateur*/
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -139,7 +169,10 @@ viewBox="0 0 50 50">
         setLocation(await Location.getCurrentPositionAsync({}));      }
     })();
   }, [location,message]);
+  //Fonction rendu de la page D'acceuille comme le Body en html
 return(
+  //DrawerLayoutAndroid == fenêtre latérale gauche de la page d'acceuille !
+    /*Stack.Navigator et Stack Screen juste en bas sert à la navigation de chaque pages entre les pages Body les events la Carte et la page individuel des alertes au liste déroulante !*/
   <DrawerLayoutAndroid
   ref={drawer}
   drawerWidth={300}
@@ -165,6 +198,7 @@ viewBox="0 0 30 30" style={styles.menu}>
   </DrawerLayoutAndroid>
 );
 }
+//Style CSS 
 const styles = StyleSheet.create({
     text:{
         color:'#ffffff',
